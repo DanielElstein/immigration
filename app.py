@@ -1,5 +1,3 @@
-pip install unstructured
-
 import streamlit as st
 import openai
 
