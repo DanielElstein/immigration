@@ -6,9 +6,12 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 import pinecone
 
 try:
-    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-    PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
-    PINECONE_API_ENV = st.secrets["PINECONE_API_ENV"]
+    openai_api_key = st.secrets["OPENAI_API_KEY"]
+    openai.api_key = openai_api_key
+    pinecone_api_key = st.secrets["PINECONE_API_KEY"]
+    pinecone.api_key = openai_api_key
+    pinecone_api_env = st.secrets["PINECONE_API_ENV"]
+    pinecone.api_env = pinecone_api_env
 
     st.write("API keys loaded successfully")
 
