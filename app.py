@@ -8,6 +8,11 @@ import pinecone
 PINECONE_API_ENV = 'us-west1-gcp-free'
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
+# Get OpenAI API key
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = openai_api_key
+pinecone.api_key = pinecone_api_key
+
 # Initialize Pinecone
 pinecone.init(
     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
