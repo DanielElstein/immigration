@@ -14,9 +14,9 @@ hide_menu_style = """
         footer {visibility: hidden;}
         header {visibility: hidden;}
         .stApp {
-            background-color: #1E90FF;
+            background-color: #ADD8E6;
         }
-        .anchor-link {
+        .anchor {
             display: none;
         }
         </style>
