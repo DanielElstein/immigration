@@ -19,10 +19,47 @@ hide_menu_style = """
         .anchor svg {
             display: none;
         }
+        /* Style the input box */
+    .stTextInput input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    /* Style the submit button */
+    button[data-baseweb="button"] {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    /* Style the headers */
+    h1, h2 {
+        font-family: Arial, sans-serif;
+    }
+    
+    /* Style the body text */
+    body, p {
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
         </style>
         """
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
+
+
+
+
+
 
 # Add JavaScript code to handle Enter key press
 enter_key_js = """
