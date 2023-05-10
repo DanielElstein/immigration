@@ -8,6 +8,9 @@ from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 import pinecone
 
+conversation_text = ""
+
+
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
 st.header("Immigration Q&A")
