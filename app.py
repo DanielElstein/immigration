@@ -8,8 +8,8 @@ from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 import pinecone
 
-conversation_text = ""
-
+# Initialize the memory
+memory = ConversationBufferMemory()
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
@@ -55,7 +55,6 @@ Báa ìbéèrè nípa ìjìmìn-ìlú sí Amẹ́ríkà ní èdè kankan, kí à
 *Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
 
 """)
-
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 PINECONE_API_ENV = st.secrets["PINECONE_API_ENV"]
@@ -81,22 +80,17 @@ if submit_button:
     Lawyer: """
 
     if query:
-        prompt = template.format(query=query, conversation_text=conversation_text)
+        prompt = template.format(query=query, conversation_text=memory.get())
         docs = docsearch.similarity_search(query, include_metadata=True)
 
-        from langchain.llms import OpenAI
-        from langchain.chains.question_answering import load_qa_chain
-
         llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-        conversation = ConversationChain(
-            llm=llm, verbose=True, memory=ConversationBufferMemory()
-        )
-        chain = load_qa_chain(llm, chain_type="stuff")
+        conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
         with st.spinner('Processing your question...'):
             result = conversation.predict(input=prompt)
 
         st.header("Answer")
         st.write(result)
-        conversation_text += f"Human: {query}\n\n"
-        conversation_text += f"Lawyer: {result}\n\n"
+        memory.append('Human', query)
+        memory.append('Lawyer', result)
+
