@@ -96,8 +96,8 @@ if submit_button:
 
         with st.spinner('Processing your question...'):
             result = chain.run(input_documents=docs, question=prompt)
-
-        st.header("Answer")
-        st.write(result)
-        conversation += f"Human: {query}\n\n"
-        conversation += f"Lawyer: {result}\n\n"
+            st.header("Answer")
+            st.write(result)
+            conversation += f"Human: {query}\n\n"
+            conversation += f"Lawyer: {result}\n\n"
+        
