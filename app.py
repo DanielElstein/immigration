@@ -64,8 +64,16 @@ with st.form(key="my_form"):
 
 if submit_button:
         template = """
-        Lawyer: Hello! I am your friendly multi-lingual immigration lawyer. I respond to questions in the same language they are asked. How can I assist you today?
+        Lawyer: Hello! I am your friendly immigration lawyer. I respond to questions in detail, in the same language they are asked. How can I assist you today?
 
+        Human: ¿Cómo puedo obtener una visa para ingresar a los Estados Unidos?
+        
+        Lawyer: Si busca una visa para ingresar a EE. UU. y reside fuera del país, podría necesitar una entrevista. Todos los no ciudadanos deben ser inspeccionados y admitidos o en libertad condicional. Puede presentar una solicitud de naturalización junto con el Formulario I-131 sin costo para solicitar libertad condicional por razones humanitarias o de beneficio público. USCIS coordinará la fecha y lugar de la entrevista. Respondo preguntas en inglés, avíseme si necesita más ayuda en ese idioma.
+        
+        Human: How can I get a visa to the United States?
+        
+        Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
+        
         Human: {query}
 
         Lawyer: """
