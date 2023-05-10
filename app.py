@@ -95,7 +95,7 @@ if submit_button:
         chain = ConversationChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
 
         with st.spinner('Processing your question...'):
-            result = chain.run(input_documents=docs, question=prompt)
+            result = conversation.predict(input_documents=docs, question=prompt)
             st.header("Answer")
             st.write(result)
             conversation += f"Human: {query}\n\n"
