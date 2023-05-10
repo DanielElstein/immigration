@@ -91,6 +91,13 @@ if submit_button:
         prompt = template.format(query=query, conversation_text=conversation_text)
         docs = docsearch.similarity_search(query, include_metadata=True)
 
+        # Generate a string of the top search results to include in the response
+        search_results = []
+        for i, doc in enumerate(docs):
+            search_results.append(f"Search Result {i+1}: {doc['metadata']['title']}\n{doc['text']}\n")
+
+        search_results_str = "\n".join(search_results)
+
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
 
@@ -105,5 +112,8 @@ if submit_button:
 
         st.header("Answer")
         st.write(result)
+        st.header("Search Results")
+        st.write(search_results_str)
         conversation_text += f"Human: {query}\n\n"
         conversation_text += f"Lawyer: {result}\n\n"
+
