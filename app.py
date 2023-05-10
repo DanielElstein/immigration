@@ -16,11 +16,12 @@ hide_menu_style = """
         .stApp {
             background-color: #ADD8E6;
         }
-        .anchor {
+        .anchor svg {
             display: none;
         }
         </style>
         """
+
 
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
