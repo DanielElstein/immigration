@@ -4,6 +4,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
+from langchain.llms import OpenAI
+from langchain.chains.question_answering import ConversationChain
 import pinecone
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
@@ -68,42 +70,34 @@ with st.form(key="my_form"):
 conversation = ""
 
 if submit_button:
-        template = """
-        System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-        
-        Human: ¿Cómo puedo obtener una visa para ingresar a los Estados Unidos?
-        
-        Lawyer: Si busca una visa para ingresar a EE. UU. y reside fuera del país, podría necesitar una entrevista. Todos los no ciudadanos deben ser inspeccionados y admitidos o en libertad condicional. Puede presentar una solicitud de naturalización junto con el Formulario I-131 sin costo para solicitar libertad condicional por razones humanitarias o de beneficio público. USCIS coordinará la fecha y lugar de la entrevista. Respondo preguntas en inglés, avíseme si necesita más ayuda en ese idioma.
-        
-        Human: How can I get a visa to the United States?
-        
-        Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
-        
-        {conversation}
-        
-        Human: {query}
+    template = """
+    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
 
-        Lawyer: """
+    Human: ¿Cómo puedo obtener una visa para ingresar a los Estados Unidos?
 
-        if query:
-            prompt = template.format(query=query, conversation=conversation)
-            docs = docsearch.similarity_search(query, include_metadata=True)
+    Lawyer: Si busca una visa para ingresar a EE. UU. y reside fuera del país, podría necesitar una entrevista. Todos los no ciudadanos deben ser inspeccionados y admitidos o en libertad condicional. Puede presentar una solicitud de naturalización junto con el Formulario I-131 sin costo para solicitar libertad condicional por razones humanitarias o de beneficio público. USCIS coordinará la fecha y lugar de la entrevista. Respondo preguntas en inglés, avíseme si necesita más ayuda en ese idioma.
 
-            from langchain.llms import OpenAI
-            from langchain.chains.question_answering import load_qa_chain
+    Human: How can I get a visa to the United States?
 
-            
-            llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-            conversation = ConversationChain(
-                llm=llm, verbose=True, memory=ConversationBufferMemory()
-            )
-            chain = load_qa_chain(llm, chain_type="stuff")
+    Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
 
-            with st.spinner('Processing your question...'):
-                result = chain.run(input_documents=docs, question=prompt)
+    {conversation}
 
-            st.header("Answer")
-            st.write(result)
-            conversation += f"Human: {query}\n\n"
-            conversation += f"Lawyer: {result}\n\n"
+    Human: {query}
 
+    Lawyer: """
+
+    if query:
+        prompt = template.format(query=query, conversation=conversation)
+        docs = docsearch.similarity_search(query, include_metadata=True)
+
+        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+        chain = ConversationChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
+
+        with st.spinner('Processing your question...'):
+            result = chain.run(input_documents=docs, question=prompt)
+
+        st.header("Answer")
+        st.write(result)
+        conversation += f"Human: {query}\n\n"
+        conversation += f"Lawyer: {result}\n\n"
