@@ -13,11 +13,12 @@ hide_menu_style = """
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
-        body {
+        .stApp {
             background-color: #1E90FF;
         }
         </style>
         """
+
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
