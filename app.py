@@ -22,12 +22,25 @@ hide_menu_style = """
         </style>
         """
 
-
-
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
+# Add JavaScript code to handle Enter key press
+enter_key_js = """
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.querySelector("input").addEventListener("keydown", function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                document.querySelector("button").click();
+            }
+        });
+    });
+</script>
+"""
+st.markdown(enter_key_js, unsafe_allow_html=True)
+
 image_path = 'liberty.png'
-st.image(image_path, width = 300)
+st.image(image_path, width=300)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -50,28 +63,25 @@ with st.form(key="my_form"):
 
 # Check if the form is submitted
 if submit_button:
-    # ... (your code to process the question and display the answer)
+    template = """
+    Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
 
+    Human: {query}
 
-        template = """
-        Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
+    Lawyer: """
 
-        Human: {query}
+    if query:
+        prompt = template.format(query=query)
+        docs = docsearch.similarity_search(query, include_metadata=True)
 
-        Lawyer: """
+        from langchain.llms import OpenAI
+        from langchain.chains.question_answering import load_qa_chain
 
-        if query:
-            prompt = template.format(query=query)
-            docs = docsearch.similarity_search(query, include_metadata=True)
+        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+        chain = load_qa_chain(llm, chain_type="stuff")
 
-            from langchain.llms import OpenAI
-            from langchain.chains.question_answering import load_qa_chain
+        with st.spinner('Processing your question...'):
+            result = chain.run(input_documents=docs, question=prompt)
 
-            llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-            chain = load_qa_chain(llm, chain_type="stuff")
-
-            with st.spinner('Processing your question...'):
-                result = chain.run(input_documents=docs, question=prompt)
-
-            st.header("Answer")
-            st.write(result)
+        st.header("Answer")
+        st.write(result)
