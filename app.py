@@ -22,17 +22,26 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# Create columns for layout
-left_column, right_column = st.columns(2)
+# Create two columns: one for the image and one for the text
+col1, col2 = st.columns([1, 3])
 
 # Display the image in the left column
-image_path = 'statue.png'
-left_column.image(image_path, width=300)
+image_path = 'liberty.png'
+col1.image(image_path, width=300)
 
-# Display the title, legal disclaimer, and multilingual message in the right column
-with right_column:
-    st.title("Immigration Q&A")
-    st.markdown("_Legal Disclaimer: This tool is for informational purposes only and should not be considered legal advice. Please consult an immigration attorney for guidance on your specific situation._")
+# Display the text in the right column
+col2.markdown("""
+**Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the USCIS handbook.**
+
+*English | Español (Mexicano) | 中文 | Tagalog | Tiếng Việt | Yoruba*
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Legal disclaimer
+st.markdown("""
+*Legal Disclaimer: This platform is not a substitute for professional legal advice. The answers provided are based on the USCIS handbook and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
+""")
 
     multilingual_message = """
     Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the USCIS handbook.
