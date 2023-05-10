@@ -98,4 +98,5 @@ if submit_button:
 
         st.header("Answer")
         st.write(result)
-        conversation_text = conversation.chain_history
+        conversation_text += f"Human: {query}\n\n"
+        conversation_text += f"Lawyer: {result}\n\n"
