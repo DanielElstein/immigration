@@ -105,6 +105,6 @@ if submit_button:
 
         st.header("Answer")
         st.write(result)
-        conversation.memory.add(prompt, result)
+        conversation.memory.push(prompt, result)
         conversation_text += f"Human: {query}\n\n"
         conversation_text += f"Lawyer: {result}\n\n"
