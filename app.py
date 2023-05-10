@@ -28,7 +28,7 @@ pinecone.init(
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
-st.title("Immigration Question Answering")
+st.title("Immigration Q&A")
 query = st.text_input("Enter your question:")
 
 if query:
