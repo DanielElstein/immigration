@@ -64,7 +64,7 @@ with st.form(key="my_form"):
 
 if submit_button:
         template = """
-        Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
+        Lawyer: Hello! I am your friendly immigration lawyer. Any question you ask, I will answer in the same language as your question. How can I assist you today?
 
         Human: {query}
 
