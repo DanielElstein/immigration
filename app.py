@@ -28,11 +28,15 @@ st.markdown(hide_menu_style, unsafe_allow_html=True)
 enter_key_js = """
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
-        document.querySelector("input").addEventListener("keydown", function(e) {
-            if (e.keyCode === 13) {
+        var input = document.querySelector("input");
+        input.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
                 e.preventDefault();
                 setTimeout(function() {
-                    document.querySelector("button[data-baseweb='button']").click();
+                    var button = document.querySelector("button[data-baseweb='button']");
+                    if (button) {
+                        button.click();
+                    }
                 }, 100);
             }
         });
