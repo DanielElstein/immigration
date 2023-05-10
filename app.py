@@ -28,3 +28,10 @@ if query:
     for idx, doc in enumerate(docs):
         st.subheader(f"Result {idx + 1}:")
         st.write(doc.page_content[:250])
+        
+from langchain.llms import OpenAI
+from langchain.chains.question_answering import load_qa_chain
+
+llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
+chain = load_qa_chain(llm, chain_type="stuff")
+chain.run(input_documents=docs, question=query)
