@@ -22,12 +22,12 @@ st.title("Immigration Search")
 query = st.text_input("Enter your query:")
 
 
-if query:
-    docs = docsearch.similarity_search(query, include_metadata=True)
-    st.header("Search Results")
-    for idx, doc in enumerate(docs):
-        st.subheader(f"Result {idx + 1}:")
-        st.write(doc.page_content[:250])
+#if query:
+#    docs = docsearch.similarity_search(query, include_metadata=True)
+#    st.header("Search Results")
+#    for idx, doc in enumerate(docs):
+#        st.subheader(f"Result {idx + 1}:")
+#        st.write(doc.page_content[:250])
         
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
