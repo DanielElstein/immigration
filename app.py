@@ -26,24 +26,15 @@ st.markdown(custom_css, unsafe_allow_html=True)
 col1, col2 = st.columns([1, 3])
 
 # Display the image in the left column
-image_path = 'liberty.png'
+image_path = 'statue.png'
 col1.image(image_path, width=300)
 
 # Display the text in the right column
 col2.markdown("""
 **Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the USCIS handbook.**
 
-*English | Español (Mexicano) | 中文 | Tagalog | Tiếng Việt | Yoruba*
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
-# Legal disclaimer
-st.markdown("""
 *Legal Disclaimer: This platform is not a substitute for professional legal advice. The answers provided are based on the USCIS handbook and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
-""")
 
-multilingual_message = """
 Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the USCIS handbook.
 
 Haga una pregunta sobre inmigración a los Estados Unidos en cualquier idioma y nuestra inteligencia artificial responderá según el manual del USCIS.
@@ -55,8 +46,7 @@ Magtanong tungkol sa imigrasyon sa Estados Unidos sa anumang wika, at sasagutin 
 Hỏi về nhập cư vào Hoa Kỳ bằng bất kỳ ngôn ngữ nào, và trí thông minh nhân tạo của chúng tôi sẽ trả lời dựa trên sách hướng dẫn của USCIS.
 
 Báa ìbéèrè nípa ìjìmìn-ìlú sí Amẹ́ríkà ní èdè kankan, kí àṣà ìmọ̀ ọ̀rọ̀ wa ṣe àpèsè láti ìwé kikọ USCIS.
-"""
-st.write(multilingual_message)
+""")
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
