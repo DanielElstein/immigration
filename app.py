@@ -79,13 +79,7 @@ if submit_button:
 
     Lawyer: """
 
-    if query:
-        prompt = template.format(query=query, conversation_text=memory.load_memory_variables({})['history'])
-        docs = docsearch.similarity_search(query, include_metadata=True)
-
-        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-        conversation = ConversationChain(
-            llm=llm, verbose=True, memory
+    
 if query:
     prompt = template.format(query=query, conversation_text=memory.load_memory_variables({})['history'])
     docs = docsearch.similarity_search(query, include_metadata=True)
