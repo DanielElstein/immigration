@@ -20,14 +20,7 @@ hide_footer_style = """
     footer {
         visibility: hidden;
     }
-    footer:after {
-        content: 'goodbye';
-        visibility: visible;
-        display: block;
-        position: relative;
-        padding: 5px;
-        top: 2px;
-    }
+    
 </style>
 """
 
