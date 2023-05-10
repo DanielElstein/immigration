@@ -5,7 +5,7 @@ from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
-from langchain.chains.question_answering import ConversationChain
+from langchain.chains import ConversationChain
 import pinecone
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
