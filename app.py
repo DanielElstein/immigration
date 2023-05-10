@@ -5,16 +5,6 @@ from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 import pinecone
 
-hide_streamlit_style = """
-<style>
-    .viewerbadge-container {
-        visibility: hidden;
-    }
-</style>
-"""
-
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
