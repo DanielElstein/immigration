@@ -12,8 +12,8 @@ embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 # Initialize Pinecone
 pinecone.init(
-    api_key=PINECONE_API_KEY,  # find at app.pinecone.io
-    environment=PINECONE_API_ENV  # next to api key in console
+    api_key=PINECONE_API_KEY,
+    environment=PINECONE_API_ENV
 )
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
@@ -21,18 +21,19 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 st.title("Immigration Search")
 query = st.text_input("Enter your query:")
 
+if query:
+    docs = docsearch.similarity_search(query, include_metadata=True)
 
-#if query:
-#    docs = docsearch.similarity_search(query, include_metadata=True)
-#    st.header("Search Results")
-#    for idx, doc in enumerate(docs):
-#        st.subheader(f"Result {idx + 1}:")
-#        st.write(doc.page_content[:250])
-        
-from langchain.llms import OpenAI
-from langchain.chains.question_answering import load_qa_chain
+    from langchain.llms import OpenAI
+    from langchain.chains.question_answering import load_qa_chain
 
-llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
-chain = load_qa_chain(llm, chain_type="stuff")
-docs = docsearch.similarity_search(query, include_metadata=True)
-chain.run(input_documents=docs, question=query)
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
+    chain = load_qa_chain(llm, chain_type="stuff")
+
+    result = chain.run(input_documents=docs, question=query)
+
+    st.header("Search Results and Answers")
+    for idx, r in enumerate(result["answer_document_pairs"]):
+        st.subheader(f"Result {idx + 1}:")
+        st.write(r["document"].page_content[:250])
+        st.write(f"Answer: {r['answer']}")
