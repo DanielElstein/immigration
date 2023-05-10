@@ -33,7 +33,7 @@ query = st.text_input("Enter your question:")
 
 from langchain import PromptTemplate
 
-template = """Answer the following question in a joking, unhelpful way.
+template = """Answer the following question in a haiku.
 
 Question: {query}
 
