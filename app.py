@@ -14,6 +14,17 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
+# Set the background color to blue
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #1E90FF;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -47,9 +58,9 @@ if query:
 
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     chain = load_qa_chain(llm, chain_type="stuff")
-    
+
     with st.spinner('Processing your question...'):
         result = chain.run(input_documents=docs, question=prompt)
-    
+
     st.header("Answer")
     st.write(result)
