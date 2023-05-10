@@ -1,14 +1,17 @@
 import streamlit as st
+from langchain.document_loaders import UnstructuredHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Pinecone
+from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
+from langchain.llms import OpenAI
+from langchain.chains.question_answering import ConversationChain
 import pinecone
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
 st.header("Immigration Q&A")
+
 
 custom_css = """
 <style>
@@ -57,14 +60,14 @@ embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 index_name = "langchaintest2"
-docsearch = Pinecone(index_name, embeddings)
+docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
 # Create a form
 with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-conversation = ""
+conversation_text = ""
 
 if submit_button:
     template = """
@@ -78,75 +81,29 @@ if submit_button:
     
     Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
     
-    {conversation}
+    {conversation_text}
     
     Human: {query}
 
     Lawyer: """
 
     if query:
-        prompt = template.format(query=query, conversation=conversation)
-        results = docsearch.query(query)
+        prompt = template.format(query=query, conversation_text=conversation_text)
+        docs = docsearch.similarity_search(query, include_metadata=True)
 
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
 
-        # Get the first document from the search results
-        doc = docs[0]
-
-        # Print the type of the document
-        print(type(doc))
-
-        # Print the methods and properties of the Document object
-        print(dir(doc))
-
-        # Create a list of search results
-        search_results = []
-
-        # Retrieve the documents without metadata
-        docs = docsearch.similarity_search(query)
-
-        # Create a list of search results
-        search_results = []
-        for i, doc in enumerate(docs):
-            # Extract title and text from the document metadata
-            title = doc['metadata']['title']
-            text = doc['metadata']['text']
-            search_results.append(f"Search Result {i+1}: {title}\n{text}\n")
-
-            # Get the metadata for the document
-            metadata = docsearch.get_document_by_id(doc["id"]).metadata
-
-            # Extract title and text from the metadata
-            title = metadata['title']
-            text = metadata['text']
-
-            # Add the search result to the list
-            score = doc['score']
-            search_results.append(f"Search Result {i+1} (Score: {score:.2f}): {title}\n{text}\n")
-
-        search_results_str = '\n\n'.join(search_results)
-        st.write(search_results_str)
-
-
-        # Update the conversation with the query and answer
-        conversation += f"Human: {query}\nLawyer: {results[0]}\n\n"
-
-        # Create a conversation chain from the conversation string
-        conversation_chain = ConversationChain(
-            text=conversation,
-            document_loader=UnstructuredHTMLLoader(),
-            text_splitter=RecursiveCharacterTextSplitter(),
-            vector_store=Chroma(),
-            memory=ConversationBufferMemory(),
-            response_generation_method=load_qa_chain(OpenAI(api_key=OPENAI_API_KEY))
+        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+        conversation = ConversationChain(
+            llm=llm, verbose=True, memory=ConversationBufferMemory()
         )
+        chain = load_qa_chain(llm, chain_type="stuff")
 
-        # Generate the AI response to the user's question
-        ai_response = conversation_chain.generate_response()
+        with st.spinner('Processing your question...'):
+            result = conversation.predict(input=prompt)
 
-        # Add the AI response to the conversation
-        conversation += f"AI: {ai_response}\n\n"
-
-        # Display the AI response to the user
-        st.write("AI:", ai_response)
+        st.header("Answer")
+        st.write(result)
+        conversation_text += f"Human: {query}\n\n"
+        conversation_text += f"Lawyer: {result}\n\n"
