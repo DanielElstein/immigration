@@ -28,8 +28,8 @@ pinecone.init(
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
-st.title("Immigration Search")
-query = st.text_input("Enter your query:")
+st.title("Immigration Question Answering")
+query = st.text_input("Enter your question:")
 
 if query:
     docs = docsearch.similarity_search(query, include_metadata=True)
@@ -42,6 +42,6 @@ if query:
 
     result = chain.run(input_documents=docs, question=query)
 
-    st.header("Search Results and Answers")
+    st.header("Answer")
     st.write(result)
 
