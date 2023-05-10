@@ -31,11 +31,12 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 st.title("Immigration Q&A")
 query = st.text_input("Enter your question:")
 
-template = """Hello! I am your friendly immigration lawyer. How can I assist you today?
+template = """
+Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
 
-Question: {query}
+Human: {query}
 
-Answer: """
+Lawyer: """
 
 if query:
     prompt = template.format(query=query)
