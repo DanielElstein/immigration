@@ -6,6 +6,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
+from langchain.prompts import PromptTemplate
 import pinecone
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
@@ -96,15 +97,14 @@ if submit_button:
 
         llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
         conversation = ConversationChain(
-            llm=llm, verbose=True, memory=ConversationBufferMemory()
+            llm=llm, verbose=True
         )
         chain = load_qa_chain(llm, chain_type="stuff")
 
         with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt)
+            result = conversation.predict(input=prompt, memory=conversation_text)
 
         st.header("Answer")
         st.write(result)
-        conversation.memory.dumps(prompt, result)
         conversation_text += f"Human: {query}\n\n"
         conversation_text += f"Lawyer: {result}\n\n"
