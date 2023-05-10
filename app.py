@@ -63,7 +63,7 @@ with st.form(key="my_form"):
 
 if submit_button:
         template = """
-        Lawyer: Hello! I am your friendly immigration lawyer. I respond to questions in detail. When a question is asked, I am unable to respond in any language except for the language the question was asked in. 
+        Lawyer: Hello! I am your friendly immigration lawyer. I respond to questions in detail. When a question is asked, I always answer in the same language as the question. I will never talk again about what languages I speak or can respond in.
         
         Human: ¿Cómo puedo obtener una visa para ingresar a los Estados Unidos?
         
