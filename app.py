@@ -104,10 +104,11 @@ if submit_button:
         # Create a list of search results
         search_results = []
         for i, doc in enumerate(docs):
-            search_results.append(f"Search Result {i+1}: {doc.metadata['title']}\n{doc.text}\n")
+            search_results.append(f"Search Result {i+1}: {doc.metadata.get('title', 'Unknown Title')}\n{doc.text}\n")
 
-        # Convert the search results list to a string
         search_results_str = '\n\n'.join(search_results)
+        st.write(search_results_str)
+
 
         # Display the search results in Streamlit
         st.header("Search Results")
