@@ -15,7 +15,7 @@ hide_menu_style = """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 # Set the background color to blue
-st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded", backgroundColor="#1E90FF")
+st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded", page_bg_color="#1E90FF")
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
