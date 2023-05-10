@@ -6,7 +6,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 import pinecone
 
 # Move st.set_page_config() before any other Streamlit command
-st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
 hide_menu_style = """
         <style>
