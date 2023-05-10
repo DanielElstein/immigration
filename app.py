@@ -88,8 +88,11 @@ if submit_button:
 
     Lawyer: """
 
-    if query:
-        prompt = template.format(query=query, conversation_text=conversation_text)
+    if submit_button:
+        inputs = {
+            "input": prompt, 
+            "memory": conversation_text
+        }
         docs = docsearch.similarity_search(query, include_metadata=True)
 
         from langchain.llms import OpenAI
@@ -97,12 +100,12 @@ if submit_button:
 
         llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
         conversation = ConversationChain(
-            llm=llm, verbose=True
+            llm=llm, verbose=True, memory=ConversationBufferMemory()
         )
         chain = load_qa_chain(llm, chain_type="stuff")
 
         with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt, memory=conversation_text)
+            result = conversation.predict(inputs=inputs)
 
         st.header("Answer")
         st.write(result)
