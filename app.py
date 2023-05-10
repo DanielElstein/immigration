@@ -63,8 +63,8 @@ with st.form(key="my_form"):
 
 if submit_button:
         template = """
-        Lawyer: Hello! I am your friendly immigration lawyer. I respond to questions in detail. I always respond in the same language the most recent question is asked, and no other language, because I assume that you, the human, can only understand that language. I can speak every language. How can I assist you today?
-
+        Lawyer: Hello! I am your friendly immigration lawyer. I respond to questions in detail. When a question is asked, I am unable to respond in any language except for the language the question was asked in. 
+        
         Human: ¿Cómo puedo obtener una visa para ingresar a los Estados Unidos?
         
         Lawyer: Si busca una visa para ingresar a EE. UU. y reside fuera del país, podría necesitar una entrevista. Todos los no ciudadanos deben ser inspeccionados y admitidos o en libertad condicional. Puede presentar una solicitud de naturalización junto con el Formulario I-131 sin costo para solicitar libertad condicional por razones humanitarias o de beneficio público. USCIS coordinará la fecha y lugar de la entrevista. Respondo preguntas en inglés, avíseme si necesita más ayuda en ese idioma.
