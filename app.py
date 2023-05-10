@@ -90,13 +90,17 @@ if submit_button:
     if query:
         prompt = template.format(query=query, conversation_text=conversation_text)
         docs = docsearch.similarity_search(query, include_metadata=True)
+        
+        # Get the first document from the search results
+        doc = docs[0]
 
-        # Generate a string of the top search results to include in the response
-        search_results = []
-        for i, doc in enumerate(docs):
-            search_results.append(f"Search Result {i+1}: {doc['metadata']['title']}\n{doc['text']}\n")
+        # Print the type of the document
+        print(type(doc))
 
-        search_results_str = "\n".join(search_results)
+        # Print the methods and properties of the Document object
+        print(dir(doc))
+
+   
 
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
