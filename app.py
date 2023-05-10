@@ -67,8 +67,6 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-conversation_text = ""
-
 if submit_button:
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
@@ -80,7 +78,7 @@ if submit_button:
     Lawyer: """
 
     if query:
-        prompt = template.format(query=query, conversation_text=conversation_text)
+        prompt = template.format(query=query, conversation_text=conversation.chain_history)
         docs = docsearch.similarity_search(query, include_metadata=True)
 
         from langchain.llms import OpenAI
@@ -91,6 +89,14 @@ if submit_button:
             llm=llm, verbose=True, memory=ConversationBufferMemory()
         )
         chain = load_qa_chain(llm, chain_type="stuff")
+
+        with st.spinner('Processing your question...'):
+            result = conversation.predict(input=prompt)
+
+        st.header("Answer")
+        st.write(result)
+        conversation.chain_history.append(f"Human: {query}")
+        conversation.chain_history.append(f"Lawyer: {result}")
 
         with st.spinner('Processing your question...'):
             result = conversation.predict(input=prompt)
