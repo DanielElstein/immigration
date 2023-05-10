@@ -5,26 +5,12 @@ from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 import pinecone
 
-hide_streamlit_style = """
-<style>
-    .viewerbadge-container {
-        visibility: hidden;
-    }
-    footer {
-        visibility: hidden;
-    }
-    footer:after {
-        content: 'goodbye';
-        visibility: visible;
-        display: block;
-        position: relative;
-        padding: 5px;
-        top: 2px;
-    }
-</style>
-"""
-
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        </style>
+        """
+st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
