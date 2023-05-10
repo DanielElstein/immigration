@@ -15,16 +15,7 @@ hide_menu_style = """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 # Set the background color to blue
-st.markdown(
-    """
-    <style>
-    .container {
-        background-color: #1E90FF;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded", backgroundColor="#1E90FF")
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -39,30 +30,28 @@ pinecone.init(
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
-# Wrap all app content in a container div with a blue background color
-with st.container():
-    st.title("Immigration Q&A")
-    query = st.text_input("Enter your question:")
+st.title("Immigration Q&A")
+query = st.text_input("Enter your question:")
 
-    template = """
-    Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
+template = """
+Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
 
-    Human: {query}
+Human: {query}
 
-    Lawyer: """
+Lawyer: """
 
-    if query:
-        prompt = template.format(query=query)
-        docs = docsearch.similarity_search(query, include_metadata=True)
+if query:
+    prompt = template.format(query=query)
+    docs = docsearch.similarity_search(query, include_metadata=True)
 
-        from langchain.llms import OpenAI
-        from langchain.chains.question_answering import load_qa_chain
+    from langchain.llms import OpenAI
+    from langchain.chains.question_answering import load_qa_chain
 
-        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-        chain = load_qa_chain(llm, chain_type="stuff")
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    chain = load_qa_chain(llm, chain_type="stuff")
 
-        with st.spinner('Processing your question...'):
-            result = chain.run(input_documents=docs, question=prompt)
+    with st.spinner('Processing your question...'):
+        result = chain.run(input_documents=docs, question=prompt)
 
-        st.header("Answer")
-        st.write(result)
+    st.header("Answer")
+    st.write(result)
