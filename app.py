@@ -87,7 +87,10 @@ if submit_button:
 
     if query:
         prompt = template.format(query=query, conversation=conversation)
-        docs = docsearch.similarity_search_with_score(query, include_metadata=True)
+        ids, scores = docsearch.get_ids_and_scores(query)
+
+        # Retrieve the documents with their metadata
+        docs = docsearch.get_documents_by_id(ids, include_metadata=True)
 
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
@@ -95,41 +98,54 @@ if submit_button:
         # Get the first document from the search results
         doc = docs[0]
 
-        # Extract title and text from the document metadata
-        title = doc.metadata.get("title", "Unknown Title")
-        text = doc.text
+        # Print the type of the document
+        print(type(doc))
 
-        # Construct the response
-        response = f"Title: {title}\n\n{text}\n\n"
+        # Print the methods and properties of the Document object
+        print(dir(doc))
 
-        # Perform conversation with LangChain
+        # Create a list of search results
+        search_results = []
+        for i, doc in enumerate(docs):
+            search_results.append(f"Search Result {i+1}: {doc.metadata.get('title', 'Unknown Title')}\n{doc.text}\n")
+
+        search_results_str = '\n\n'.join(search_results)
+        st.write(search_results_str)
+
+        # Display the search results in Streamlit
+        st.header("Search Results")
+        st.write(search_results_str)
+
         llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
         conversation = ConversationChain(
             llm=llm, verbose=True, memory=ConversationBufferMemory()
         )
         chain = load_qa_chain(llm, chain_type="stuff")
 
-        with st.spinner("Processing your question..."):
+        with st.spinner('Processing your question...'):
             # Perform similarity search on Pinecone
-            docs = docsearch.similarity_search(query, include_metadata=True)
+            ids, scores = docsearch.get_ids_and_scores(query)
 
-            # Get the first document from the search results
-            doc = docs[0]
+            # Retrieve the documents with their metadata
+            docs = docsearch.get_documents_by_id(ids, include_metadata=True)
 
-            # Extract title and text from the document metadata
-            title = doc.metadata.get('title', 'Unknown Title')
-            text = doc.text
+        # Get the first document from the search results
+        doc = docs[0]
 
-            # Construct the response
-            response = f"Title: {title}\n\n{text}\n\n"
+        # Extract title and text from the document metadata
+        title = doc.metadata['title']
+        text = doc.text
 
-            # Perform conversation with LangChain
-            prompt = template.format(query=query, conversation=conversation)
-            conversation.predict(input=prompt)
+        # Construct the response
+        response = f"Title: {title}\n\n{text}\n\n"
 
-            # Get the response from the conversation
-            response += conversation.get_output()[0]['output_text']
+        # Perform conversation with LangChain
+        prompt = template.format(query=query, conversation=conversation)
+        conversation.predict(input=prompt)
 
-            # Show the response to the user
-            st.header("Answer")
-            st.write(response)
+        # Get the response from the conversation
+        response += conversation.get_output()[0]['output_text']
+
+        # Show the response to the user
+        st.header("Answer")
+        st.write(response)
