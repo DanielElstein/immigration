@@ -43,12 +43,12 @@ index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
 st.title("Immigration Q&A")
-query = st.text_input("Enter your question:")
+# Create a form
+with st.form(key="my_form"):
+    query = st.text_input("Enter your question:")
+    submit_button = st.form_submit_button("Submit")
 
-# Add a submit button
-submit_button = st.button("Submit")
-
-# Check if the submit button is clicked
+# Check if the form is submitted
 if submit_button:
     # ... (your code to process the question and display the answer)
 
