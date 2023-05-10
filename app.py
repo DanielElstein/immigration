@@ -34,7 +34,7 @@ col1.image(image_path, width=350)
 
 # Display the text in the right column
 col2.markdown("""
-Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the USCIS policy manual.
+Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the [USCIS policy manual](https://www.uscis.gov/policy-manual).
 
 Haga una pregunta sobre inmigración a los Estados Unidos en cualquier idioma y nuestra inteligencia artificial responderá según el manual del USCIS.
 
