@@ -4,14 +4,12 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
-from langchain.llms import OpenAI
-from langchain.chains import ConversationChain
+from langchain.chains.conversation import ConversationChain
 import pinecone
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
 st.header("Immigration Q&A")
-
 
 custom_css = """
 <style>
@@ -67,7 +65,7 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-conversation_text = ""
+conversation = ""
 
 if submit_button:
     template = """
@@ -81,16 +79,19 @@ if submit_button:
     
     Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
     
-    {conversation_text}
+    {conversation}
     
     Human: {query}
 
     Lawyer: """
 
     if query:
-        prompt = template.format(query=query, conversation_text=conversation_text)
+        prompt = template.format(query=query, conversation=conversation)
         docs = docsearch.similarity_search(query, include_metadata=True)
-        
+
+        from langchain.llms import OpenAI
+        from langchain.chains.question_answering import load_qa_chain
+
         # Get the first document from the search results
         doc = docs[0]
 
@@ -100,10 +101,17 @@ if submit_button:
         # Print the methods and properties of the Document object
         print(dir(doc))
 
-   
+        # Create a list of search results
+        search_results = []
+        for i, doc in enumerate(docs):
+            search_results.append(f"Search Result {i+1}: {doc.metadata['title']}\n{doc.text}\n")
 
-        from langchain.llms import OpenAI
-        from langchain.chains.question_answering import load_qa_chain
+        # Convert the search results list to a string
+        search_results_str = '\n\n'.join(search_results)
+
+        # Display the search results in Streamlit
+        st.header("Search Results")
+        st.write(search_results_str)
 
         llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
         conversation = ConversationChain(
@@ -112,12 +120,27 @@ if submit_button:
         chain = load_qa_chain(llm, chain_type="stuff")
 
         with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt)
+            # Perform similarity search on Pinecone
+            docs = docsearch.similarity_search(query, include_metadata=True)
+            
+# Get the first document from the search results
+doc = docs[0]
 
-        st.header("Answer")
-        st.write(result)
-        st.header("Search Results")
-        st.write('\n\n'.join(search_results))
-        conversation_text += f"Human: {query}\n\n"
-        conversation_text += f"Lawyer: {result}\n\n"
+# Extract title and text from the document metadata
+title = doc['metadata']['title']
+text = doc['text']
+
+# Construct the response
+response = f"Title: {title}\n\n{text}\n\n"
+
+# Perform conversation with LangChain
+prompt = template.format(query=query, conversation=conversation)
+conversation.predict(input=prompt)
+
+# Get the response from the conversation
+response += conversation.get_output()[0]['output_text']
+
+# Show the response to the user
+st.header("Answer")
+st.write(response)
 
