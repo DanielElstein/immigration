@@ -54,8 +54,7 @@ if query:
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    result = chain.run(input_documents=docs, question=prompt_template)
+    result = chain.run(input_documents=docs, prompt_template=prompt_template)
 
     st.header("Answer")
     st.write(result)
-
