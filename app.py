@@ -20,6 +20,7 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
 st.title("Immigration Search")
 query = st.text_input("Enter your query:")
+docs = docsearch.similarity_search(query, include_metadata=True)
 
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
