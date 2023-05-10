@@ -45,25 +45,33 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 st.title("Immigration Q&A")
 query = st.text_input("Enter your question:")
 
-template = """
-Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
+# Add a submit button
+submit_button = st.button("Submit")
 
-Human: {query}
+# Check if the submit button is clicked
+if submit_button:
+    # ... (your code to process the question and display the answer)
 
-Lawyer: """
 
-if query:
-    prompt = template.format(query=query)
-    docs = docsearch.similarity_search(query, include_metadata=True)
+        template = """
+        Lawyer: Hello! I am your friendly immigration lawyer. How can I assist you today?
 
-    from langchain.llms import OpenAI
-    from langchain.chains.question_answering import load_qa_chain
+        Human: {query}
 
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    chain = load_qa_chain(llm, chain_type="stuff")
+        Lawyer: """
 
-    with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=docs, question=prompt)
+        if query:
+            prompt = template.format(query=query)
+            docs = docsearch.similarity_search(query, include_metadata=True)
 
-    st.header("Answer")
-    st.write(result)
+            from langchain.llms import OpenAI
+            from langchain.chains.question_answering import load_qa_chain
+
+            llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+            chain = load_qa_chain(llm, chain_type="stuff")
+
+            with st.spinner('Processing your question...'):
+                result = chain.run(input_documents=docs, question=prompt)
+
+            st.header("Answer")
+            st.write(result)
