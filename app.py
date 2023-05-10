@@ -14,21 +14,6 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-hide_footer_style = """
-<style>
-    .viewerbadge-container {
-        visibility: hidden;
-    }
-    footer {
-        visibility: hidden;
-    }
-    
-</style>
-"""
-
-st.markdown(hide_footer_style, unsafe_allow_html=True)
-
-
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
