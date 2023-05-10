@@ -89,9 +89,6 @@ if submit_button:
         prompt = template.format(query=query, conversation=conversation)
         ids, scores = docsearch.get_ids_and_scores(query)
 
-        # Retrieve the documents with their metadata
-        docs = docsearch.get_documents_by_id(ids, include_metadata=True)
-
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
 
@@ -106,15 +103,17 @@ if submit_button:
 
         # Create a list of search results
         search_results = []
+
         # Retrieve the documents without metadata
         docs = docsearch.similarity_search(query)
 
-        # Extract metadata for each document
+        # Create a list of search results
         search_results = []
         for i, doc in enumerate(docs):
-            # Get the document ID and score
-            doc_id = doc.id
-            score = doc.score
+            # Extract title and text from the document metadata
+            title = doc['metadata']['title']
+            text = doc['metadata']['text']
+            search_results.append(f"Search Result {i+1}: {title}\n{text}\n")
 
             # Get the metadata for the document
             metadata = docsearch.get_document_by_id(doc_id).metadata
