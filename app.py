@@ -76,6 +76,8 @@ if submit_button:
         
         Lawyer: If you are seeking a visa to enter the United States, you may need to appear for an interview in the United States if you reside outside the country and have separated from the military. All noncitizens must be inspected and admitted or paroled in order to enter the United States. If you are seeking parole into the United States, you may file a naturalization application concurrently with an Application for Travel Document (Form I-131) without a fee to seek an advance parole document for a humanitarian or significant public benefit parole before entering the United States, if necessary. USCIS will coordinate with you to schedule an interview date and location. 
         
+        {conversation}
+        
         Human: {query}
 
         Lawyer: """
@@ -87,7 +89,11 @@ if submit_button:
             from langchain.llms import OpenAI
             from langchain.chains.question_answering import load_qa_chain
 
+            
             llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+            conversation = ConversationChain(
+                llm=llm, verbose=True, memory=ConversationBufferMemory()
+            )
             chain = load_qa_chain(llm, chain_type="stuff")
 
             with st.spinner('Processing your question...'):
