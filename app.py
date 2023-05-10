@@ -106,27 +106,26 @@ if submit_button:
 
         # Create a list of search results
         search_results = []
+        # Retrieve the documents without metadata
         docs = docsearch.similarity_search(query)
+
+        # Extract metadata for each document
+        search_results = []
         for i, doc in enumerate(docs):
-            # Extract title and text from the document metadata
-            title = doc['metadata']['title']
-            text = doc['metadata']['text']
-            search_results.append(f"Search Result {i+1}: {title}\n{text}\n")
+            # Get the document ID and score
+            doc_id = doc.id
+            score = doc.score
+
+            # Get the metadata for the document
+            metadata = docsearch.get_document_by_id(doc_id).metadata
+
+            # Extract title and text from the metadata
+            title = metadata['title']
+            text = metadata['text']
+
+            # Add the search result to the list
+            search_results.append(f"Search Result {i+1} (Score: {score:.2f}): {title}\n{text}\n")
 
         search_results_str = '\n\n'.join(search_results)
         st.write(search_results_str)
 
-        # Display the search results in Streamlit
-        st.header("Search Results")
-        st.write(search_results_str)
-
-        # Perform conversation with LangChain
-        prompt = template.format(query=query, conversation=conversation)
-        conversation.predict(input=prompt)
-
-        # Get the response from the conversation
-        response = conversation.get_output()[0]['output_text']
-
-        # Show the response to the user
-        st.header("Answer")
-        st.write(response)
