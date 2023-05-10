@@ -33,9 +33,7 @@ query = st.text_input("Enter your question:")
 
 from langchain import PromptTemplate
 
-template = """Answer the question based on the context below. If the
-question cannot be answered using the information provided answer
-with "I don't know".
+template = """Answer the following question in a joking, unhelpful way.
 
 Question: {query}
 
