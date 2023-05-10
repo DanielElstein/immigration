@@ -26,7 +26,7 @@ st.markdown(custom_css, unsafe_allow_html=True)
 left_column, right_column = st.columns(2)
 
 # Display the image in the left column
-image_path = 'liberty.png'
+image_path = 'statue.png'
 left_column.image(image_path, width=300)
 
 # Display the title, legal disclaimer, and multilingual message in the right column
