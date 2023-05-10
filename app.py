@@ -26,7 +26,7 @@ hide_menu_style = """
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-image_path = 'your_image.png'
+image_path = 'liberty.png'
 st.image(image_path, use_column_width=True)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
