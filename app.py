@@ -27,7 +27,7 @@ hide_menu_style = """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 image_path = 'liberty.png'
-st.image(image_path, use_column_width=True)
+st.image(image_path, width = 300)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
