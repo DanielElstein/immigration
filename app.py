@@ -1,7 +1,6 @@
 import streamlit as st
-from langchain.document_loaders import UnstructuredHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma, Pinecone
+from langchain.vectorstores import Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
@@ -104,9 +103,6 @@ if submit_button:
         # Create a list of search results
         search_results = []
 
-        
-        ids, scores = docsearch.query(queries=[query], top_k=10)
-
         # Retrieve the documents without metadata
         docs = docsearch.similarity_search(query)
 
@@ -119,15 +115,38 @@ if submit_button:
             search_results.append(f"Search Result {i+1}: {title}\n{text}\n")
 
             # Get the metadata for the document
-            metadata = docsearch.get_document_by_id(doc_id).metadata
+            metadata = docsearch.get_document_by_id(doc["id"]).metadata
 
             # Extract title and text from the metadata
             title = metadata['title']
             text = metadata['text']
 
             # Add the search result to the list
+            score = doc['score']
             search_results.append(f"Search Result {i+1} (Score: {score:.2f}): {title}\n{text}\n")
 
         search_results_str = '\n\n'.join(search_results)
         st.write(search_results_str)
 
+
+        # Update the conversation with the query and answer
+        conversation += f"Human: {query}\nLawyer: {results[0]}\n\n"
+
+        # Create a conversation chain from the conversation string
+        conversation_chain = ConversationChain(
+            text=conversation,
+            document_loader=UnstructuredHTMLLoader(),
+            text_splitter=RecursiveCharacterTextSplitter(),
+            vector_store=Chroma(),
+            memory=ConversationBufferMemory(),
+            response_generation_method=load_qa_chain(OpenAI(api_key=OPENAI_API_KEY))
+        )
+
+        # Generate the AI response to the user's question
+        ai_response = conversation_chain.generate_response()
+
+        # Add the AI response to the conversation
+        conversation += f"AI: {ai_response}\n\n"
+
+        # Display the AI response to the user
+        st.write("AI:", ai_response)
