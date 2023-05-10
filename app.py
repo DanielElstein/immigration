@@ -27,7 +27,7 @@ col1, col2 = st.columns([1, 3])
 
 # Display the image in the left column
 image_path = 'statue.png'
-col1.image(image_path, width=300)
+col1.image(image_path, width=350)
 
 # Display the text in the right column
 col2.markdown("""
