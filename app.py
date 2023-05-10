@@ -88,23 +88,24 @@ if submit_button:
     Lawyer: """
 
     if query:
-        prompt = template.format(query=query, conversation_text=conversation_text)
-        docs = docsearch.similarity_search(query, include_metadata=True)
+    prompt = template.format(query=query, conversation_text=conversation_text)
+    docs = docsearch.similarity_search(query, include_metadata=True)
 
-        from langchain.llms import OpenAI
-        from langchain.chains.question_answering import load_qa_chain
+    from langchain.llms import OpenAI
+    from langchain.chains.question_answering import load_qa_chain
 
-        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-        conversation = ConversationChain(
-            llm=llm, verbose=True, memory=ConversationBufferMemory()
-        )
-        chain = load_qa_chain(llm, chain_type="stuff")
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    conversation = ConversationChain(
+        llm=llm, verbose=True, memory=ConversationBufferMemory()
+    )
+    chain = load_qa_chain(llm, chain_type="stuff")
 
-        with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt)
+    with st.spinner('Processing your question...'):
+        result = conversation.predict(input=prompt)
 
-        st.header("Answer")
-        st.write(result)
-        conversation_text += f"Human: {query}\n\n"
-        conversation_text += f"Lawyer: {result}\n\n"
-        conversation.add_to_memory(prompt, result)
+    st.header("Answer")
+    st.write(result)
+    conversation.memory.add(prompt, result)
+    conversation_text += f"Human: {query}\n\n"
+    conversation_text += f"Lawyer: {result}\n\n"
+
