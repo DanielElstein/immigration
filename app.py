@@ -51,7 +51,9 @@ if query:
     from langchain.llms import OpenAI
     from langchain.chains.question_answering import load_qa_chain
 
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo", messages=[
+        {"role": "system", "content": "You are a helpful assistant."}
+    ])
     chain = load_qa_chain(llm, chain_type="stuff")
 
     result = chain.run(input_documents=docs, question=prompt_template)
