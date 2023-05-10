@@ -31,7 +31,9 @@ enter_key_js = """
         document.querySelector("input").addEventListener("keydown", function(e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
-                document.querySelector("button[data-baseweb='button']").click();
+                setTimeout(function() {
+                    document.querySelector("button[data-baseweb='button']").click();
+                }, 100);
             }
         });
     });
