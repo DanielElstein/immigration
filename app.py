@@ -117,7 +117,7 @@ if submit_button:
         st.header("Answer")
         st.write(result)
         st.header("Search Results")
-        st.write(search_results_str)
+        st.write('\n\n'.join(search_results))
         conversation_text += f"Human: {query}\n\n"
         conversation_text += f"Lawyer: {result}\n\n"
 
