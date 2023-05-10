@@ -33,7 +33,5 @@ if query:
     result = chain.run(input_documents=docs, question=query)
 
     st.header("Search Results and Answers")
-    for idx, r in enumerate(result["answer_document_pairs"]):
-        st.subheader(f"Result {idx + 1}:")
-        st.write(r["document"].page_content[:250])
-        st.write(f"Answer: {r['answer']}")
+    st.write(result)
+
