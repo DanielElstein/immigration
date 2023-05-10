@@ -106,8 +106,12 @@ if submit_button:
 
         # Create a list of search results
         search_results = []
+        docs = docsearch.similarity_search(query)
         for i, doc in enumerate(docs):
-            search_results.append(f"Search Result {i+1}: {doc.metadata.get('title', 'Unknown Title')}\n{doc.text}\n")
+            # Extract title and text from the document metadata
+            title = doc['metadata']['title']
+            text = doc['metadata']['text']
+            search_results.append(f"Search Result {i+1}: {title}\n{text}\n")
 
         search_results_str = '\n\n'.join(search_results)
         st.write(search_results_str)
@@ -116,35 +120,12 @@ if submit_button:
         st.header("Search Results")
         st.write(search_results_str)
 
-        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-        conversation = ConversationChain(
-            llm=llm, verbose=True, memory=ConversationBufferMemory()
-        )
-        chain = load_qa_chain(llm, chain_type="stuff")
-
-        with st.spinner('Processing your question...'):
-            # Perform similarity search on Pinecone
-            ids, scores = docsearch.get_ids_and_scores(query)
-
-            # Retrieve the documents with their metadata
-            docs = docsearch.get_documents_by_id(ids, include_metadata=True)
-
-        # Get the first document from the search results
-        doc = docs[0]
-
-        # Extract title and text from the document metadata
-        title = doc.metadata['title']
-        text = doc.text
-
-        # Construct the response
-        response = f"Title: {title}\n\n{text}\n\n"
-
         # Perform conversation with LangChain
         prompt = template.format(query=query, conversation=conversation)
         conversation.predict(input=prompt)
 
         # Get the response from the conversation
-        response += conversation.get_output()[0]['output_text']
+        response = conversation.get_output()[0]['output_text']
 
         # Show the response to the user
         st.header("Answer")
