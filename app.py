@@ -16,8 +16,12 @@ hide_menu_style = """
         .stApp {
             background-color: #1E90FF;
         }
+        .anchor-link {
+            display: none;
+        }
         </style>
         """
+
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
