@@ -31,21 +31,14 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 st.title("Immigration Q&A")
 query = st.text_input("Enter your question:")
 
-from langchain import PromptTemplate
-
 template = """Hello! I am your friendly immigration lawyer. How can I assist you today?
 
 Question: {query}
 
 Answer: """
 
-prompt_template = PromptTemplate(
-    input_variables=["query"],
-    template=template
-)
-
-
 if query:
+    prompt = template.format(query=query)
     docs = docsearch.similarity_search(query, include_metadata=True)
 
     from langchain.llms import OpenAI
@@ -54,7 +47,7 @@ if query:
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    result = chain.run(input_documents=docs, prompt_template=prompt_template)
+    result = chain.run(input_documents=docs, question=prompt)
 
     st.header("Answer")
     st.write(result)
