@@ -10,12 +10,15 @@ hide_menu_style = """
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
+        body {
+            background-color: #1E90FF;
+        }
         </style>
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-# Set the background color to blue
-st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded", backgroundColor="#1E90FF")
+# Remove the backgroundColor parameter from this line
+st.set_page_config(page_title="Immigration Q&A", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded")
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -41,17 +44,19 @@ Human: {query}
 Lawyer: """
 
 if query:
-    prompt = template.format(query=query)
-    docs = docsearch.similarity_search(query, include_metadata=True)
+        prompt = template.format(query=query)
+        docs = docsearch.similarity_search(query, include_metadata=True)
 
-    from langchain.llms import OpenAI
-    from langchain.chains.question_answering import load_qa_chain
+        from langchain.llms import OpenAI
+        from langchain.chains.question_answering import load_qa_chain
 
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    chain = load_qa_chain(llm, chain_type="stuff")
+        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+        chain = load_qa_chain(llm, chain_type="stuff")
 
-    with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=docs, question=prompt)
+        with st.spinner('Processing your question...'):
+            result = chain.run(input_documents=docs, question=prompt)
 
-    st.header("Answer")
-    st.write(result)
+        st.header("Answer")
+        st.write(result)
+
+
