@@ -1,5 +1,7 @@
 import streamlit as st
-from langchain.vectorstores import Pinecone
+from langchain.document_loaders import UnstructuredHTMLLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
@@ -25,11 +27,14 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
+# Create two columns: one for the image and one for the text
 col1, col2 = st.columns([1, 3])
 
+# Display the image in the left column
 image_path = 'statue.png'
 col1.image(image_path, width=350)
 
+# Display the text in the right column
 col2.markdown("""
 Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the [USCIS policy manual](https://www.uscis.gov/policy-manual).
 
@@ -56,35 +61,44 @@ pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
-memory = ConversationBufferMemory(return_messages=False)
-
+# Create a form
 with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-if submit_button:
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    conversation = ConversationChain(
-        llm=llm, verbose=True, memory=memory
-    )
+# Initialize the conversation memory
+memory = ConversationBufferMemory()
 
+if submit_button:
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-    
+   
     {conversation_text}
     
     Human: {query}
 
     Lawyer: """
-    
+
     if query:
-        conversation_text = memory.load_memory_variables({})['history']
-        prompt = template.format(query=query, conversation_text=conversation_text)
-        
-        with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt)
+        prompt = template.format(query=query, conversation_text=memory.load_memory_variables({})['history'])
+        docs = docsearch.similarity_search(query, include_metadata=True)
 
-        st.header("Answer")
-        st.write(result)
+        llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+        conversation = ConversationChain(
+            llm=llm, verbose=True, memory
+if query:
+    prompt = template.format(query=query, conversation_text=memory.load_memory_variables({})['history'])
+    docs = docsearch.similarity_search(query, include_metadata=True)
 
-        memory.save_context({"input": f"Human: {query}\n\n"}, {"output": f"Lawyer: {result}\n\n"})
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
+
+    with st.spinner('Processing your question...'):
+        result = conversation.predict(input=prompt)
+
+    st.header("Answer")
+    st.write(result)
+
+    # Save the conversation into memory
+    memory.save_context({"input": f"Human: {query}\nLawyer: {result}"}, {"output": ""})
+
