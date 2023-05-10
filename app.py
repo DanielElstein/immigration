@@ -56,20 +56,15 @@ hide_menu_style = """
 
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-
 # Add JavaScript code to handle Enter key press
 enter_key_js = """
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
-        var input = document.querySelector("input");
-        input.addEventListener("keyup", function(e) {
-            if (e.key === "Enter") {
+        document.querySelector("input").addEventListener("keydown", function(e) {
+            if (e.keyCode === 13) {
                 e.preventDefault();
                 setTimeout(function() {
-                    var button = document.querySelector("button[data-baseweb='button']");
-                    if (button) {
-                        button.click();
-                    }
+                    document.querySelector("button[data-baseweb='button']").click();
                 }, 100);
             }
         });
@@ -77,21 +72,6 @@ enter_key_js = """
 </script>
 """
 st.markdown(enter_key_js, unsafe_allow_html=True)
-
-# Create columns for layout
-left_column, right_column = st.columns(2)
-
-# Display the image in the left column
-left_column.image(image_path, width=300)
-
-# Display the title and form in the right column
-with right_column:
-    st.title("Immigration Q&A")
-
-    # Create a form
-    with st.form(key="my_form"):
-        query = st.text_input("Enter your question:")
-        submit_button = st.form_submit_button("Submit")
 
 image_path = 'liberty.png'
 st.image(image_path, width=300)
@@ -108,6 +88,12 @@ pinecone.init(
 )
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
+
+st.title("Immigration Q&A")
+# Create a form
+with st.form(key="my_form"):
+    query = st.text_input("Enter your question:")
+    submit_button = st.form_submit_button("Submit")
 
 # Check if the form is submitted
 if submit_button:
