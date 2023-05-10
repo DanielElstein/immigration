@@ -73,7 +73,7 @@ enter_key_js = """
 """
 st.markdown(enter_key_js, unsafe_allow_html=True)
 
-image_path = 'liberty.png'
+image_path = 'statue.png'
 st.image(image_path, width=300)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
