@@ -58,7 +58,7 @@ embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 index_name = "langchaintest2"
-docsearch = Pinecone.from_existing_index(index_name, embeddings)
+docsearch = Pinecone(index_name, embeddings)
 
 # Create a form
 with st.form(key="my_form"):
@@ -87,7 +87,7 @@ if submit_button:
 
     if query:
         prompt = template.format(query=query, conversation=conversation)
-        ids, scores = docsearch.get_ids_and_scores(query)
+        results = docsearch.query(query)
 
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
@@ -103,6 +103,9 @@ if submit_button:
 
         # Create a list of search results
         search_results = []
+
+        
+        ids, scores = docsearch.query(queries=[query], top_k=10)
 
         # Retrieve the documents without metadata
         docs = docsearch.similarity_search(query)
