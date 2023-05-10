@@ -87,7 +87,7 @@ if submit_button:
 
     if query:
         prompt = template.format(query=query, conversation=conversation)
-        docs = docsearch.similarity_search(query, include_metadata=True)
+        docs = docsearch.similarity_search_with_score(query, include_metadata=True)
 
         from langchain.llms import OpenAI
         from langchain.chains.question_answering import load_qa_chain
