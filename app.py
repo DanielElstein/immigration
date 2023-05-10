@@ -31,6 +31,22 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 st.title("Immigration Q&A")
 query = st.text_input("Enter your question:")
 
+from langchain import PromptTemplate
+
+template = """Answer the question based on the context below. If the
+question cannot be answered using the information provided answer
+with "I don't know".
+
+Question: {query}
+
+Answer: """
+
+prompt_template = PromptTemplate(
+    input_variables=["query"],
+    template=template
+)
+
+
 if query:
     docs = docsearch.similarity_search(query, include_metadata=True)
 
@@ -40,7 +56,7 @@ if query:
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    result = chain.run(input_documents=docs, question=query)
+    result = chain.run(input_documents=docs, question=prompt_template)
 
     st.header("Answer")
     st.write(result)
