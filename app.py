@@ -94,7 +94,7 @@ if submit_button:
         chain = load_qa_chain(llm, chain_type="stuff")
 
         with st.spinner('Processing your question...'):
-            result = conversation.predict(input=prompt, memory_variables={"conversation_text": conversation_text})
+            result = conversation.predict(prompt, memory_variables={"conversation_text": conversation_text})
 
 
         st.header("Answer")
