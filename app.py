@@ -59,7 +59,12 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    
+    }
+    div.stApp div div div div div div:nth-child(6) {
+        text-align: left;
+        padding: 0;
+        margin: 0;
+    }
 
 </style>
 """
