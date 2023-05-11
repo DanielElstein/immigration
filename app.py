@@ -25,6 +25,9 @@ custom_css = """
         display: none;
     }
     
+.appview-container .main .block-container{{
+        padding-top: {padding_top}rem;    }}
+
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
