@@ -12,17 +12,6 @@ st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_
 
 st.header("Immigration Q&A")
 
-# Auto-scroll with JavaScript
-st.markdown(
-    """
-    <script>
-    window.onload = function() {
-        window.scrollBy(0, 10);
-    }
-    </script>
-    """,
-    unsafe_allow_html=True
-)
 
 custom_css = """
 <style>
