@@ -23,14 +23,9 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    .element-container {
-        word-wrap: break-word;
-        min-width: 350px; /* or whatever minimum width you want */
-    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
-
 
 
 
