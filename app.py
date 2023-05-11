@@ -30,7 +30,7 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 
 # Create two columns: one for the image and one for the text
-col1, col2 = st.columns([2, 3])
+col1, col2 = st.columns([1, 2])
 
 # Display the image in the left column
 image_path = 'statue.png'
