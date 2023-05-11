@@ -58,15 +58,41 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-# Create a form inside the second column
-with col2.form(key="my_form"):
-    query = col2.text_input("Enter your question:")
-    submit_button = col2.form_submit_button("Submit")
+st.header("Immigration Q&A")
 
-# Legal Disclaimer inside the second column
-col2.markdown("""
+custom_css = """
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stApp {
+        background-color: #ADD8E6;
+    }
+    .anchor svg {
+        display: none;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
+
+# Display the text
+st.markdown("""
+Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the [USCIS policy manual](https://www.uscis.gov/policy-manual).
+
+Haga una pregunta sobre inmigración a los Estados Unidos en cualquier idioma y nuestra inteligencia artificial responderá según el manual del USCIS.
+
+用任何语言提问有关美国移民的问题，我们的人工智能将根据美国公民及移民服务局的手册进行回答。
+
+Magtanong tungkol sa imigrasyon sa Estados Unidos sa anumang wika, at sasagutin ng aming artificial intelligence batay sa USCIS handbook.
+
+Hỏi về nhập cư vào Hoa Kỳ bằng bất kỳ ngôn ngữ nào, và trí thông minh nhân tạo của chúng tôi sẽ trả lời dựa trên sách hướng dẫn của USCIS.
+
+Báa ìbéèrè nípa ìjìmìn-ìlú sí Amẹ́ríkà ní èdè kankan, kí àṣà ìmọ̀ ọ̀rọ̀ wa ṣe àpèsè láti ìwé kikọ USCIS.
+
 *Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
 """)
+
+# Rest of your code...
 
 
 # Initialize the conversation memory
