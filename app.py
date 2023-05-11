@@ -18,7 +18,7 @@ custom_css = """
     footer {visibility: hidden;}
     header {visibility: hidden;}
     .stApp {
-        background-color: #ADD8E6;
+        background-color: #ddedee;
     }
     .anchor svg {
         display: none;
