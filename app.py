@@ -49,6 +49,17 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
     
+# Auto-scroll with JavaScript
+st.markdown(
+    """
+    <script>
+    window.onload = function() {
+        window.scrollBy(0, 10);
+    }
+    </script>
+    """,
+    unsafe_allow_html=True
+)
     
 custom_css = """
 <style>
