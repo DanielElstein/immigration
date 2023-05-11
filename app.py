@@ -23,9 +23,16 @@ custom_css = """
     .anchor svg {
         display: none;
     }
+    div[data-baseweb="block"] {
+        margin-top: -20px;
+    }
+    div.row-widget.stCard {
+        margin-top: -20px;
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+
 
 # Display the text
 st.markdown("""
