@@ -23,9 +23,13 @@ custom_css = """
     .anchor svg {
         display: none;
     }
+    .element-container {
+        word-wrap: break-word;
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+
 
 # Create two columns: one for the image and one for the text
 col1, col2 = st.columns([1, 3])
