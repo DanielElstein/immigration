@@ -59,9 +59,8 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    div.stApp div div div div div div:nth-child(6) {
-        text-align: left;
-    }
+    st.write('<style>div.stApp div div div div div div:nth-child(6) { text-align: left; padding: 0; margin: 0; }</style>', unsafe_allow_html=True)
+
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
