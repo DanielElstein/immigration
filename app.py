@@ -123,8 +123,8 @@ if query:
     if docs:
         st.header("Search Results")
         for doc in docs:
-            metadata = doc.get("metadata")
-            if metadata is not None and isinstance(metadata, dict):
+            metadata = doc.metadata
+            if metadata is not None:
                 title = metadata.get("title")
                 description = metadata.get("description")
                 url = metadata.get("url")
@@ -135,3 +135,4 @@ if query:
                 if url is not None:
                     st.write(url)
                 st.write("---")
+
