@@ -105,11 +105,19 @@ if query:
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
-    # Display search results
+   # Display search results
     if docs:
         st.header("Search Results")
         for doc in docs:
-            st.write(doc["metadata"]["title"])
-            st.write(doc["metadata"]["description"])
-            st.write(doc["metadata"]["url"])
-            st.write("---")
+            metadata = doc.get("metadata")
+            if metadata is not None and isinstance(metadata, dict):
+                title = metadata.get("title")
+                description = metadata.get("description")
+                url = metadata.get("url")
+                if title is not None:
+                    st.write(title)
+                if description is not None:
+                    st.write(description)
+                if url is not None:
+                    st.write(url)
+                st.write("---")
