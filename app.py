@@ -27,7 +27,6 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-
 # Display the text
 st.markdown("""
 
@@ -49,6 +48,18 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
+custom_css = """
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stApp {
+        background-color: #ddedee;
+    }
+    .anchor svg {
+        display: none;
+    }
+</style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
@@ -72,7 +83,15 @@ if query:
     if "conversation_memory" not in st.session_state:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
+    template = """
+    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
+   
+    {conversation_text}
     
+    Human: {query}
+
+    Lawyer: """
+
     prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
     docs = docsearch.similarity_search(query, include_metadata=True)
@@ -88,5 +107,3 @@ if query:
     st.header("Answer")
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
-
-
