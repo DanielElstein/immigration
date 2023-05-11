@@ -28,14 +28,6 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 
-
-# Create two columns: one for the image and one for the text
-col1, col2 = st.columns([1, 2])
-
-# Display the image in the left column
-image_path = 'statue.png'
-col1.image(image_path, width=350)
-
 # Display the text in the right column
 col2.markdown("""
 Ask a question about immigration to the United States in any language, and our artificial intelligence will answer based on the [USCIS policy manual](https://www.uscis.gov/policy-manual).
