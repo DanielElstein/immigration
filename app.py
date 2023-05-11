@@ -49,18 +49,6 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-custom_css = """
-<style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .stApp {
-        background-color: #ADD8E6;
-    }
-    .anchor svg {
-        display: none;
-    }
-</style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
