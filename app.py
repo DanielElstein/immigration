@@ -23,19 +23,14 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    @media (max-width: 768px) {
-        .element-container {
-            display: flex;
-            flex-direction: column-reverse;
-        }
-        .stImage img {
-            width: 100%;
-            height: auto;
-        }
+    .element-container {
+        word-wrap: break-word;
+        min-width: 200px; /* or whatever minimum width you want */
     }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+
 
 
 
