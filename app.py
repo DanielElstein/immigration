@@ -47,6 +47,20 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
+    # Add JavaScript snippet to submit form on Enter key press
+    st.markdown(
+        """
+        <script>
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('button[data-baseweb="button"]').click();
+            }
+        });
+        </script>
+        """,
+        unsafe_allow_html=True
+    )    
+    
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
