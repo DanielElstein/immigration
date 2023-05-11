@@ -48,8 +48,6 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-st.header("Immigration Q&A")
-
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
