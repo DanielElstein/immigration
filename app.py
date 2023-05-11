@@ -72,15 +72,7 @@ if query:
     if "conversation_memory" not in st.session_state:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
-    template = """
-    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-   
-    {conversation_text}
     
-    Human: {query}
-
-    Lawyer: """
-
     prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
     docs = docsearch.similarity_search(query, include_metadata=True)
