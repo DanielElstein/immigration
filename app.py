@@ -119,6 +119,8 @@ if query:
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
+    st.write(docs)
+ 
    # Display search results
     if docs:
         st.header("Search Results")
