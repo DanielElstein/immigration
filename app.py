@@ -25,8 +25,6 @@ custom_css = """
         display: none;
     }
     
-.appview-container .main .block-container{{
-        padding-top: {padding_top}rem;    }}
 
 </style>
 """
