@@ -25,7 +25,7 @@ custom_css = """
     }
     .element-container {
         word-wrap: break-word;
-        min-width: 200px; /* or whatever minimum width you want */
+        min-width: 350px; /* or whatever minimum width you want */
     }
 </style>
 """
