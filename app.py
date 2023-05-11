@@ -66,10 +66,16 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-# Legal Disclaimer
+# Create a form inside the second column
+with col2.form(key="my_form"):
+    query = col2.text_input("Enter your question:")
+    submit_button = col2.form_submit_button("Submit")
+
+# Legal Disclaimer inside the second column
 col2.markdown("""
 *Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
 """)
+
 
 # Initialize the conversation memory
 memory = ConversationBufferMemory()
