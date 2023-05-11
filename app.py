@@ -23,6 +23,12 @@ custom_css = """
     .anchor svg {
         display: none;
     }
+    #scroll-anchor {
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
@@ -58,12 +64,6 @@ custom_css = """
     }
     .anchor svg {
         display: none;
-    }
-    
-    div.stApp div div div div div div:nth-child(6) {
-        text-align: left;
-        padding: 0;
-        margin: 0;
     }
 
 </style>
