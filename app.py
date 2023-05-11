@@ -23,12 +23,20 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    .element-container {
-        word-wrap: break-word;
+    @media (max-width: 768px) {
+        .element-container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .stImage img {
+            width: 100%;
+            height: auto;
+        }
     }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+
 
 
 # Create two columns: one for the image and one for the text
