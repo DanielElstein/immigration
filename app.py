@@ -12,7 +12,6 @@ st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_
 
 st.header("Immigration Q&A")
 
-
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
@@ -24,8 +23,6 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-    
-
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
@@ -35,7 +32,6 @@ st.markdown("""
 
 *Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
 """)
-
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -50,9 +46,7 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
-    
 
-    
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
@@ -64,11 +58,9 @@ custom_css = """
     .anchor svg {
         display: none;
     }
-
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
-
 
 # Initialize the conversation memory
 memory = ConversationBufferMemory()
@@ -82,8 +74,6 @@ if submit_button:
     Human: {query}
 
     Lawyer: """
-
-
     
 if query:
     # Create conversation memory if it doesn't exist in session_state
@@ -101,7 +91,7 @@ if query:
 
     prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
-    docs = docsearch.similarity_search(query, include_metadata=True)
+        docs = docsearch.similarity_search(query, include_metadata=True)
 
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     conversation = ConversationChain(
@@ -114,3 +104,12 @@ if query:
     st.header("Answer")
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
+
+    # Display search results
+    if docs:
+        st.header("Search Results")
+        for doc in docs:
+            st.write(doc["metadata"]["title"])
+            st.write(doc["metadata"]["description"])
+            st.write(doc["metadata"]["url"])
+            st.write("---")
