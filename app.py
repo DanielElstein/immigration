@@ -71,7 +71,6 @@ col2.markdown("""
 *Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
 """)
 
-
 # Initialize the conversation memory
 memory = ConversationBufferMemory()
 
