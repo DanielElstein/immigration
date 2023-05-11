@@ -54,6 +54,11 @@ with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
+# Scroll anchor element
+scroll_anchor = st.empty()
+scroll_anchor.markdown('<div id="scroll-anchor"></div>', unsafe_allow_html=True)
+    
+    
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
@@ -84,6 +89,20 @@ if submit_button:
 
     Lawyer: """
 
+# Auto-scroll with JavaScript
+st.markdown(
+    """
+    <script>
+    window.onload = function() {
+        const scrollAnchor = document.getElementById('scroll-anchor');
+        if (scrollAnchor) {
+            scrollAnchor.scrollIntoView();
+        }
+    }
+    </script>
+    """,
+    unsafe_allow_html=True
+)
     
 if query:
     # Create conversation memory if it doesn't exist in session_state
