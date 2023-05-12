@@ -88,29 +88,15 @@ memory = ConversationBufferMemory()
 conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 if query:
-    
-    template = """You are a chatbot having a conversation with a human.
 
-    {chat_history}
-    Human: {human_input}
-    Chatbot:"""
-
-    # Fetch the chat history from the memory object
-    chat_history = memory.load_memory_variables({}).get('history', '')
-
-    # Format the prompt using the chat history and the new user input
-    full_prompt = template.format(chat_history=chat_history, human_input=query)
-    
     # Generate the response
     with st.spinner('Processing your question...'):
-        result = conversation.predict(input=full_prompt)
+        result = conversation.predict(input=query)
 
     # Save the AI's response to the conversation memory
     memory.save_context({"input": query}, {"output": result})
 
-    # Display the prompt and the answer
-    st.header("Prompt")
-    st.write(full_prompt)  # Display the full prompt value
-
+    # Display the AI's response
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
+
