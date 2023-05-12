@@ -76,12 +76,13 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
+memory = ConversationBufferMemory()
 
 # Create an instance of OpenAI
 llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
 
 # Create an instance of ConversationChain
-conversation = ConversationChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
+conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 
 if query:
