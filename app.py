@@ -124,20 +124,12 @@ if query:
     if docs:
         st.header("Search Results")
         for doc in docs:
-            metadata = doc.metadata
-            if metadata:
-                title = metadata.get("title")
-                description = metadata.get("description")
-                url = metadata.get("url")
-                if title:
-                    st.write(title)
-                if description:
-                    st.write(description)
-                if url:
-                    st.write(url)
-                st.write("---")
+            doc_id = doc.id
+            st.write("Document ID:", doc_id)
+            st.write("---")
     else:
         st.write("No results found.")
+
 
 
 
