@@ -103,6 +103,12 @@ if query:
     )
 
     with st.spinner('Processing your question...'):
+        # Update conversation memory with user input
+        st.session_state.conversation_memory.update_memory_variables({"input": query})
+
+        # Generate prompt with updated conversation history
+        prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
+
         result = conversation.predict(input=prompt)
 
     st.header("Prompt")
@@ -122,5 +128,6 @@ if query:
             st.write("---")
     else:
         st.write("No results found.")
+
 
 
