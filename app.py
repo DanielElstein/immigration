@@ -125,10 +125,11 @@ if query:
         st.header("Search Results")
         for index, doc in enumerate(docs, 1):
             st.write(f"Result {index}:")
-            st.write(doc)
+            st.write(doc.page_content)
             st.write("---")
     else:
         st.write("No results found.")
+
 
 
 
