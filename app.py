@@ -94,9 +94,7 @@ if query:
    
     {conversation_text}  
    
-    Human: {query}
     
-    AI: 
     
     """
 
