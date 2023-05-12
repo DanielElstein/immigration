@@ -120,7 +120,7 @@ if query:
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
  
-   # Display search results
+  # Display search results
     if docs:
         st.header("Search Results")
         for doc in docs:
@@ -136,6 +136,9 @@ if query:
                 if url:
                     st.write(url)
                 st.write("---")
+    else:
+        st.write("No results found.")
+
 
 
 
