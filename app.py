@@ -121,17 +121,21 @@ if query:
 
  
    # Display search results
-    if docs:
-        st.header("Search Results")
-        for doc in docs:
-            metadata = doc.metadata
-            if metadata is not None and metadata.get("title"):
-                st.write(metadata["title"])
-            if metadata is not None and metadata.get("description"):
-                st.write(metadata["description"])
-            if metadata is not None and metadata.get("url"):
-                st.write(metadata["url"])
-            if metadata is not None and (metadata.get("title") or metadata.get("description") or metadata.get("url")):
-                st.write("---")
+if docs:
+    st.header("Search Results")
+    for doc in docs:
+        metadata = doc.metadata
+        if metadata:
+            title = metadata.get("title")
+            description = metadata.get("description")
+            url = metadata.get("url")
+            if title:
+                st.write(title)
+            if description:
+                st.write(description)
+            if url:
+                st.write(url)
+            st.write("---")
+
 
 
