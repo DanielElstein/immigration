@@ -25,7 +25,27 @@ st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_
 
 st.header("Immigration Q&A")
 
-# Rest of the code...
+custom_css = """
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stApp {
+        background-color: #ddedee;
+    }
+    .anchor svg {
+        display: none;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
+
+# Display the text
+st.markdown("""
+
+*Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
+""")
+
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 PINECONE_API_ENV = st.secrets["PINECONE_API_ENV"]
