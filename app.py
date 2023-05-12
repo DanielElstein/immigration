@@ -95,7 +95,7 @@ if query:
    
     {conversation_text}
     
-    Human: {query}
+    
     """
 
     # Retrieve the conversation history from the memory
