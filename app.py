@@ -84,6 +84,9 @@ if query:
     if "conversation_memory" not in st.session_state:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
+    # Add the user query to the conversation
+    st.session_state.conversation.add_message('Human', query)
+    
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
    
