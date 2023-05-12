@@ -8,31 +8,24 @@ from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 import pinecone
 
+class Conversation:
+    def __init__(self):
+        self.history = []
+
+    def add_message(self, role, message):
+        self.history.append((role, message))
+
+    def get_conversation(self):
+        conversation_text = ""
+        for role, message in self.history:
+            conversation_text += f"{role}: {message}\n"
+        return conversation_text
+
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
 st.header("Immigration Q&A")
 
-custom_css = """
-<style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .stApp {
-        background-color: #ddedee;
-    }
-    .anchor svg {
-        display: none;
-    }
-</style>
-"""
-st.markdown(custom_css, unsafe_allow_html=True)
-
-# Display the text
-st.markdown("""
-
-*Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
-""")
-
+# Rest of the code...
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 PINECONE_API_ENV = st.secrets["PINECONE_API_ENV"]
@@ -42,86 +35,47 @@ pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 index_name = "langchaintest2"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
-# Create a form
 with st.form(key="my_form"):
     query = st.text_input("Enter your question:")
     submit_button = st.form_submit_button("Submit")
 
-    # Add JavaScript snippet to submit form on Enter key press
-    st.markdown(
-        """
-        <script>
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                document.querySelector('button[data-baseweb="button"]').click();
-            }
-        });
-        </script>
-        """,
-        unsafe_allow_html=True
-    )    
-    
-custom_css = """
-<style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .stApp {
-        background-color: #ddedee;
-    }
-    .anchor svg {
-        display: none;
-    }
-</style>
-"""
-st.markdown(custom_css, unsafe_allow_html=True)
-
-# Initialize the conversation memory
-memory = ConversationBufferMemory()
-
 if query:
-    # Create conversation memory if it doesn't exist in session_state
-    if "conversation_memory" not in st.session_state:
-        st.session_state.conversation_memory = ConversationBufferMemory()
+    # Create conversation in session_state if it doesn't exist
+    if "conversation" not in st.session_state:
+        st.session_state.conversation = Conversation()
 
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    
-    conversation = ConversationChain(
-        llm=llm, verbose=True, memory=st.session_state.conversation_memory
-    )
-        
-    # Add the user query to the conversation
+    # Add the user's message to the conversation history
     st.session_state.conversation.add_message('Human', query)
-    
+
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
    
-    {conversation_text}
-    
-    AI:
+    {conversation_text}  
     """
 
-    # conversation history: {conversation_text} \n 
+    # Retrieve the conversation history from the session state
+    conversation_text = st.session_state.conversation.get_conversation()
 
-    # Retrieve conversation history from the memory
-    conversation_text = st.session_state.conversation_memory.load_memory_variables({})['history']
+    # Generate prompt with updated conversation history
+    prompt = template.format(conversation_text=conversation_text)
 
-    # Generate the prompt
-    prompt = template.format(query=query, conversation_text=conversation_text)
-
-    docs = docsearch.similarity_search(query, include_metadata=True)
-
-    
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    memory = ConversationBufferMemory()
+    conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
     with st.spinner('Processing your question...'):
-        # Generate the response
         result = conversation.predict(input=prompt)
+
+    # Add the AI's response to the conversation history
+    st.session_state.conversation.add_message('AI', result)
 
     st.header("Prompt")
     st.write(prompt)  # Display the prompt value
 
     st.header("Answer")
-    st.write(result)
+    st.write(result)  # Display the AI-generated answer
+
+    docs = docsearch.similarity_search(query, include_metadata=True)
 
     # Display search results
     if docs:
@@ -133,3 +87,4 @@ if query:
             st.write("---")
     else:
         st.write("No results found.")
+
