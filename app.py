@@ -96,7 +96,7 @@ if query:
    
     Human: {query}
     
-    AI: {result}
+    AI: 
     
     """
 
