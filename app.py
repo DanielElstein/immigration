@@ -84,8 +84,8 @@ if query:
     if "conversation_memory" not in st.session_state:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
-    # Update conversation memory with user input
-    st.session_state.conversation_memory.save_context({"input": query}, {"output": None})
+    # Save the input to the conversation memory
+    st.session_state.conversation_memory.save_context({"input": query}, {"output": ""})
 
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
@@ -101,6 +101,14 @@ if query:
 
     # Generate prompt with updated conversation history
     prompt = template.format(query=query, conversation_text=conversation_text)
+
+    # Generate the response and save it
+    with st.spinner('Processing your question...'):
+        result = conversation.predict(input=prompt)
+        st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
+
+    # Your code continues here
+
 
     # Display the prompt and the answer
     st.header("Prompt")
