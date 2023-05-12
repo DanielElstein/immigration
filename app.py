@@ -95,9 +95,7 @@ if query:
    
     {conversation_text}
     
-    Human: {query}
-
-    Lawyer: """
+    """
 
     # Retrieve the conversation history from the memory
     conversation_text = memory.load_memory_variables({})['history']
