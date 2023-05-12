@@ -87,27 +87,27 @@ conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 if query:
     # Save the input to the conversation memory
-    memory.save_context({"input": query}, {"output": ""})
+    memory.add_user_message(query)
 
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-   
+
     {conversation_text}  
-   
-    
-    
+
+
+
     """
 
     # Retrieve the conversation history from the memory
-    conversation_text = memory.load_memory_variables({})['history']
+    conversation_text = "\n".join(["Human: " + msg.text for msg in memory.messages])
 
     # Generate prompt with updated conversation history
-    prompt = template.format(query=query, conversation_text=conversation_text)
+    prompt = template.format(conversation_text=conversation_text)
 
     # Generate the response and save it
     with st.spinner('Processing your question...'):
         result = conversation.predict(input=prompt)
-        memory.save_context({"input": query}, {"output": result})
+        memory.add_ai_message(result)
 
     # Display the prompt and the answer
     st.header("Prompt")
@@ -115,16 +115,3 @@ if query:
 
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
-
-    docs = docsearch.similarity_search(query, include_metadata=True)
-
-    # Display search results
-    if docs:
-        st.header("Search Results")
-        st.write(f"Total search results: {len(docs)}")  # Display the number of results
-        for index, doc in enumerate(docs, 1):
-            st.write(f"Result {index}:")
-            st.write(doc.page_content)  # Display each search result
-            st.write("---")
-    else:
-        st.write("No results found.")
