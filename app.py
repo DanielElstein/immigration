@@ -91,9 +91,9 @@ if query:
     
     Human: {query}
 
-    Lawyer: {result} """
+    """
 
-    prompt = template.format(query=query, result=result, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
+    prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
     docs = docsearch.similarity_search(query, include_metadata=True)
 
@@ -107,7 +107,7 @@ if query:
         st.session_state.conversation_memory.load_memory_variables({})['input'] = query
 
         # Generate prompt with updated conversation history
-        prompt = template.format(query=query, result=result, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
+        prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
         result = conversation.predict(input=prompt)
 
