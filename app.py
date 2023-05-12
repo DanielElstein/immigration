@@ -105,6 +105,9 @@ if query:
     with st.spinner('Processing your question...'):
         result = conversation.predict(input=prompt)
 
+    st.header("Prompt")
+    st.write(prompt)  # Display the prompt value
+
     st.header("Answer")
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
@@ -119,4 +122,5 @@ if query:
             st.write("---")
     else:
         st.write("No results found.")
+
 
