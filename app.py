@@ -79,15 +79,6 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # Initialize the conversation memory
 memory = ConversationBufferMemory()
 
-if submit_button:
-    template = """
-    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-   
-    {conversation_text}
-    
-    Human: {query}
-
-    Lawyer: """
     
 if query:
     # Create conversation memory if it doesn't exist in session_state
