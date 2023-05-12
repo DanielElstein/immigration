@@ -123,12 +123,15 @@ if query:
   # Display search results
     if docs:
         st.header("Search Results")
+        print(f"Total search results: {len(docs)}")  # Print the number of results
         for index, doc in enumerate(docs, 1):
+            print(f"Result {index}: {doc.page_content}")  # Print each search result
             st.write(f"Result {index}:")
             st.write(doc.page_content)
             st.write("---")
     else:
         st.write("No results found.")
+
 
 
 
