@@ -85,12 +85,12 @@ if query:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
     template = """
-    Human: {query}
+    
     
     System: You are a friendly immigration lawyer. Respond to questions in detail. Always answer in the same language as the question.
    
     {conversation_text}
-        
+    Human: {query}    
    
     """
 
