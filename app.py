@@ -102,4 +102,23 @@ if query:
     # Generate prompt with updated conversation history
     prompt = template.format(query=query, conversation_text=conversation_text)
 
-    # Your code continues here
+    # Display the prompt and the answer
+    st.header("Prompt")
+    st.write(prompt)  # Display the prompt value
+
+    st.header("Answer")
+    st.write(result)  # Display the AI-generated answer
+
+    docs = docsearch.similarity_search(query, include_metadata=True)
+
+    # Display search results
+    if docs:
+        st.header("Search Results")
+        st.write(f"Total search results: {len(docs)}")  # Display the number of results
+        for index, doc in enumerate(docs, 1):
+            st.write(f"Result {index}:")
+            st.write(doc.page_content)  # Display each search result
+            st.write("---")
+    else:
+        st.write("No results found.")
+
