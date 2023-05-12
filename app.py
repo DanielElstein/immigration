@@ -86,9 +86,12 @@ if query:
 
     template = """
     
-    conversation history: {conversation_text} \n 
-    
+    system message: play the role of a friendly immigration lawyer, who answers in the same language as the question \n
+    human: {query} \n
+    ai:     
     """
+
+    # conversation history: {conversation_text} \n 
 
     # Retrieve conversation history from the memory
     conversation_text = st.session_state.conversation_memory.load_memory_variables({})['history']
