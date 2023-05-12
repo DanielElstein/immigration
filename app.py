@@ -94,7 +94,11 @@ if query:
     AI:
     """
 
-    prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
+    # Retrieve conversation history from the memory
+    conversation_text = st.session_state.conversation_memory.load_memory_variables({})['history']
+
+    # Generate the prompt
+    prompt = template.format(query=query, conversation_text=conversation_text)
 
     docs = docsearch.similarity_search(query, include_metadata=True)
 
@@ -104,12 +108,7 @@ if query:
     )
 
     with st.spinner('Processing your question...'):
-        # Update conversation memory with user input
-        st.session_state.conversation_memory.load_memory_variables({})['input'] = query
-
-        # Generate prompt with updated conversation history
-        prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
-
+        # Generate the response
         result = conversation.predict(input=prompt)
 
     st.header("Prompt")
@@ -117,7 +116,6 @@ if query:
 
     st.header("Answer")
     st.write(result)
-    st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
     # Display search results
     if docs:
