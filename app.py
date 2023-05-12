@@ -90,7 +90,8 @@ if query:
     {conversation_text}
     
     Human: {query}
-
+    
+    AI:
     """
 
     prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
