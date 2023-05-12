@@ -92,7 +92,7 @@ if query:
     Human: {human_input}
     Chatbot:"""
 
-    prompt = promptTemplate(
+    prompt = PromptTemplate(
         input_variables=["chat_history", "human_input"], 
         template=template
     )
