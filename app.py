@@ -84,6 +84,12 @@ if query:
     if "conversation_memory" not in st.session_state:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    
+    conversation = ConversationChain(
+        llm=llm, verbose=True, memory=st.session_state.conversation_memory
+    )
+        
     # Add the user query to the conversation
     st.session_state.conversation.add_message('Human', query)
     
@@ -105,10 +111,7 @@ if query:
 
     docs = docsearch.similarity_search(query, include_metadata=True)
 
-    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    conversation = ConversationChain(
-        llm=llm, verbose=True, memory=st.session_state.conversation_memory
-    )
+    
 
     with st.spinner('Processing your question...'):
         # Generate the response
