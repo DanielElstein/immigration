@@ -77,36 +77,28 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-memory = ConversationBufferMemory()
-
 # Create an instance of OpenAI
 llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
 
 # Create an instance of ConversationChain
-conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
+conversation = ConversationChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
 
 
 if query:
-    # Save the user's query to the conversation memory
-    memory.save_context({"input": query}, {"output": ""})
+    
+    template = """You are a chatbot having a conversation with a human.
 
-    template = """
-    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
+    {chat_history}
+    Human: {human_input}
+    Chatbot:"""
 
-    {conversation_text}  
-    """
+    prompt = PromptTemplate(
+        input_variables=["chat_history", "human_input"], 
+        template=template
+    )
+    memory = ConversationBufferMemory(memory_key="chat_history")
+    
 
-    # Retrieve the memory variables from the memory
-    memory_variables = memory.load_memory_variables({})
-
-    # Extract and order the conversation history
-    conversation_text = ""
-    for key in sorted(memory_variables.keys()):
-        role, text = key.split("_", 1)
-        conversation_text += f"{role.capitalize()}: {text}\n"
-
-    # Generate prompt with updated conversation history
-    prompt = template.format(conversation_text=conversation_text)
 
     # Generate the response
     with st.spinner('Processing your question...'):
