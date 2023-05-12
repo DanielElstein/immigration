@@ -6,9 +6,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
-from langchain import OpenAI, LLMChain, PromptTemplate
 import pinecone
-import re
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
@@ -78,25 +76,55 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# Create an instance of OpenAI
-llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-
-# Create an instance of ConversationBufferMemory
+# Initialize the conversation memory
 memory = ConversationBufferMemory()
 
-# Create an instance of ConversationChain
-conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
-
 if query:
+    # Create conversation memory if it doesn't exist in session_state
+    if "conversation_memory" not in st.session_state:
+        st.session_state.conversation_memory = ConversationBufferMemory()
 
-    # Generate the response
+    template = """
+    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
+   
+    {conversation_text}
+    
+    Human: {query}
+
+    Lawyer: """
+
+    prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
+
+    docs = docsearch.similarity_search(query, include_metadata=True)
+
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    conversation = ConversationChain(
+        llm=llm, verbose=True, memory=st.session_state.conversation_memory
+    )
+
     with st.spinner('Processing your question...'):
-        result = conversation.predict(input=query)
+        # Update conversation memory with user input
+        st.session_state.conversation_memory.load_memory_variables({})['input'] = query
 
-    # Save the AI's response to the conversation memory
-    memory.save_context({"input": query}, {"output": result})
+        # Generate prompt with updated conversation history
+        prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
-    # Display the AI's response
+        result = conversation.predict(input=prompt)
+
+    st.header("Prompt")
+    st.write(prompt)  # Display the prompt value
+
     st.header("Answer")
-    st.write(result)  # Display the AI-generated answer
+    st.write(result)
+    st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
+    # Display search results
+    if docs:
+        st.header("Search Results")
+        st.write(f"Total search results: {len(docs)}")  # Display the number of results
+        for index, doc in enumerate(docs, 1):
+            st.write(f"Result {index}:")
+            st.write(doc.page_content)  # Display each search result
+            st.write("---")
+    else:
+        st.write("No results found.")
