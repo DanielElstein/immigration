@@ -85,8 +85,7 @@ if query:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
     template = """
-    {conversation_text}
-    Human: {query}    
+    {conversation_text}   
     """
 
     # Retrieve conversation history from the memory
