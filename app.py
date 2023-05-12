@@ -86,7 +86,6 @@ if query:
 
     template = """
     {conversation_text}
-    System: You are a friendly immigration lawyer. Respond to questions in detail. Always answer in the same language as the question.
     Human: {query}    
     """
 
