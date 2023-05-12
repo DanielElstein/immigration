@@ -91,7 +91,7 @@ if query:
     
     Human: {query}
 
-    Lawyer: """
+    Lawyer: {result} """
 
     prompt = template.format(query=query, conversation_text=st.session_state.conversation_memory.load_memory_variables({})['history'])
 
