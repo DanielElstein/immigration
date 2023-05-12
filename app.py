@@ -76,50 +76,39 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-class Conversation:
-    def __init__(self):
-        self.history = []
-
-    def add_message(self, role, message):
-        self.history.append((role, message))
-
-    def get_conversation(self):
-        conversation_text = ""
-        for role, message in self.history:
-            conversation_text += f"{role}: {message}\n"
-        return conversation_text
-# Initialize the conversation object
-if "conversation" not in st.session_state:
-    st.session_state.conversation = Conversation()
+# Initialize the conversation memory
+memory = ConversationBufferMemory()
 
 if query:
-    # Add the user query to the conversation
-    st.session_state.conversation.add_message('Human', query)
+    # Create conversation memory if it doesn't exist in session_state
+    if "conversation_memory" not in st.session_state:
+        st.session_state.conversation_memory = ConversationBufferMemory()
 
     template = """
-    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-   
-    {conversation_text}
     
-    AI:
+    system message: play the role of a friendly immigration lawyer, who answers in the same language as the question \n
+    human: {query} \n
+    ai:     
     """
 
+    # conversation history: {conversation_text} \n 
+
+    # Retrieve conversation history from the memory
+    conversation_text = st.session_state.conversation_memory.load_memory_variables({})['history']
+
     # Generate the prompt
-    prompt = template.format(conversation_text=st.session_state.conversation.get_conversation())
+    prompt = template.format(query=query, conversation_text=conversation_text)
 
     docs = docsearch.similarity_search(query, include_metadata=True)
 
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    conversation_chain = ConversationChain(
+    conversation = ConversationChain(
         llm=llm, verbose=True, memory=st.session_state.conversation_memory
     )
 
     with st.spinner('Processing your question...'):
         # Generate the response
-        result = conversation_chain.predict(input=prompt)
-        
-        # Add the AI response to the conversation
-        st.session_state.conversation.add_message('AI', result)
+        result = conversation.predict(input=prompt)
 
     st.header("Prompt")
     st.write(prompt)  # Display the prompt value
