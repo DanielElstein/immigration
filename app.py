@@ -79,7 +79,6 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # Initialize the conversation memory
 memory = ConversationBufferMemory()
 
-    
 if query:
     # Create conversation memory if it doesn't exist in session_state
     if "conversation_memory" not in st.session_state:
@@ -110,25 +109,14 @@ if query:
     st.write(result)
     st.session_state.conversation_memory.save_context({"input": query}, {"output": result})
 
- 
-  # Display search results
+    # Display search results
     if docs:
         st.header("Search Results")
-        print(f"Total search results: {len(docs)}")  # Print the number of results
+        st.write(f"Total search results: {len(docs)}")  # Display the number of results
         for index, doc in enumerate(docs, 1):
-            print(f"Result {index}: {doc.page_content}")  # Print each search result
             st.write(f"Result {index}:")
-            st.write(doc.page_content)
+            st.write(doc.page_content)  # Display each search result
             st.write("---")
     else:
         st.write("No results found.")
-
-
-
-
-
-
-
-
-
 
