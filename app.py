@@ -85,9 +85,9 @@ if query:
         st.session_state.conversation_memory = ConversationBufferMemory()
 
     template = """
-    system message: play the role of a friendly immigration lawyer, who answers in the same language as the question
-    conversation history: {conversation_text}  
-    human: {query}
+    system message: play the role of a friendly immigration lawyer, who answers in the same language as the question \n
+    conversation history: {conversation_text} \n 
+    human: {query} \n
     ai: 
     """
 
