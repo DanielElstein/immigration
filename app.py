@@ -81,9 +81,11 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # Create an instance of OpenAI
 llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
 
-# Create an instance of ConversationChain
-conversation = ConversationChain(llm=llm, verbose=True, memory=ConversationBufferMemory())
+# Create an instance of ConversationBufferMemory
+memory = ConversationBufferMemory()
 
+# Create an instance of ConversationChain
+conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 if query:
     
@@ -93,24 +95,22 @@ if query:
     Human: {human_input}
     Chatbot:"""
 
-    prompt = PromptTemplate(
-        input_variables=["chat_history", "human_input"], 
-        template=template
-    )
-    memory = ConversationBufferMemory(memory_key="chat_history")
+    # Fetch the chat history from the memory object
+    chat_history = memory.load_memory_variables({}).get('history', '')
+
+    # Format the prompt using the chat history and the new user input
+    full_prompt = template.format(chat_history=chat_history, human_input=query)
     
-
-
     # Generate the response
     with st.spinner('Processing your question...'):
-        result = conversation.predict(input=prompt)
+        result = conversation.predict(input=full_prompt)
 
     # Save the AI's response to the conversation memory
     memory.save_context({"input": query}, {"output": result})
 
     # Display the prompt and the answer
     st.header("Prompt")
-    st.write(prompt)  # Display the prompt value
+    st.write(full_prompt)  # Display the full prompt value
 
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
