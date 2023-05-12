@@ -7,6 +7,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 import pinecone
+import re
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
@@ -87,19 +88,22 @@ conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 if query:
     # Save the input to the conversation memory
-    memory.add_user_message(query)
+    memory.save_context({f"user_{query}": ""}, {})
 
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
 
     {conversation_text}  
-
-
-
     """
 
-    # Retrieve the conversation history from the memory
-    conversation_text = "\n".join(["Human: " + msg.text for msg in memory.messages])
+    # Retrieve the memory variables from the memory
+    memory_variables = memory.load_memory_variables({})
+
+    # Extract and order the conversation history
+    conversation_text = ""
+    for key in sorted(memory_variables.keys()):
+        role, text = key.split("_", 1)
+        conversation_text += f"{role.capitalize()}: {text}\n"
 
     # Generate prompt with updated conversation history
     prompt = template.format(conversation_text=conversation_text)
@@ -107,7 +111,7 @@ if query:
     # Generate the response and save it
     with st.spinner('Processing your question...'):
         result = conversation.predict(input=prompt)
-        memory.add_ai_message(result)
+        memory.save_context({f"ai_{result}": ""}, {})
 
     # Display the prompt and the answer
     st.header("Prompt")
