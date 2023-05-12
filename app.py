@@ -87,8 +87,8 @@ conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
 
 
 if query:
-    # Save the input to the conversation memory
-    memory.save_context({f"user_{query}": ""}, {})
+    # Save the user's query to the conversation memory
+    memory.save_context({"input": query}, {"output": ""})
 
     template = """
     System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
@@ -108,10 +108,12 @@ if query:
     # Generate prompt with updated conversation history
     prompt = template.format(conversation_text=conversation_text)
 
-    # Generate the response and save it
+    # Generate the response
     with st.spinner('Processing your question...'):
         result = conversation.predict(input=prompt)
-        memory.save_context({f"ai_{result}": ""}, {})
+
+    # Save the AI's response to the conversation memory
+    memory.save_context({"input": query}, {"output": result})
 
     # Display the prompt and the answer
     st.header("Prompt")
