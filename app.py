@@ -123,12 +123,13 @@ if query:
   # Display search results
     if docs:
         st.header("Search Results")
-        for doc in docs:
-            doc_id = doc.id
-            st.write("Document ID:", doc_id)
+        for index, doc in enumerate(docs, 1):
+            st.write(f"Result {index}:")
+            st.write(doc)
             st.write("---")
     else:
         st.write("No results found.")
+
 
 
 
