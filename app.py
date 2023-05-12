@@ -123,13 +123,13 @@ if query:
   # Display search results
     if docs:
         st.header("Search Results")
-        unique_docs = set(docs)  # Filter out duplicates
-        for index, doc in enumerate(unique_docs, 1):
+        for index, doc in enumerate(docs, 1):
             st.write(f"Result {index}:")
             st.write(doc.page_content)
             st.write("---")
     else:
         st.write("No results found.")
+
 
 
 
