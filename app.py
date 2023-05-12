@@ -32,7 +32,7 @@ PINECONE_API_ENV = st.secrets["PINECONE_API_ENV"]
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
-index_name = "langchaintest2"
+index_name = "immigration"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
 with st.form(key="my_form"):
