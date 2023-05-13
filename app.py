@@ -81,20 +81,6 @@ if query:
     prompt = template.format(conversation_text=conversation_text)
 
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    memory = ConversationBufferMemory()
-    conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
-
-    with st.spinner('Processing your question...'):
-        result = conversation.predict(input=prompt)
-
-    # Add the AI's response to the conversation history
-    st.session_state.conversation.add_message('AI', result)
-
-    st.header("Prompt")
-    st.write(prompt)  # Display the prompt value
-
-    st.header("Answer")
-    st.write(result)  # Display the AI-generated answer
 
     # Perform document search
     docs = docsearch.similarity_search(query, include_metadata=True, k=3)
