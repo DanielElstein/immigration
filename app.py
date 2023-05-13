@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain.document_loaders import UnstructuredHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma, Pinecone
+from langchain.vectorstores import Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
@@ -100,7 +100,6 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-    
 
     # Debug: Check the docs variable
     print(f"Number of docs: {len(docs)}")
