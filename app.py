@@ -96,6 +96,8 @@ if query:
     st.write(result)  # Display the AI-generated answer
 
     docs = docsearch.similarity_search(query, include_metadata=True)
+
+    # Debug: Check the docs variable
     print(f"Number of docs: {len(docs)}")
     for i, doc in enumerate(docs):
         print(f"Doc {i}: {doc.page_content}")
@@ -104,10 +106,12 @@ if query:
     if docs:
         st.header("Search Results")
         st.write(f"Total search results: {len(docs)}")  # Display the number of results
+
         for index, doc in enumerate(docs, 1):
+            # Debug: Check each loop iteration
+            print(f"Displaying result {index}")
             st.write(f"Result {index}:")
             st.write(doc.page_content)  # Display each search result
             st.write("---")
     else:
         st.write("No results found.")
-
