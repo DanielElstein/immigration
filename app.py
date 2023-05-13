@@ -96,29 +96,31 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-    docs = docsearch.similarity_search(query, include_metadata=True,k=3)
-    
+    # Perform document search
+    docs = docsearch.similarity_search(query, include_metadata=True, k=3)
+
     # Load the question-answering chain
     chain = load_qa_chain(llm, chain_type="stuff")  # Replace "stuff" with the actual chain type
 
     # Use the question-answering chain to answer the question
     with st.spinner('Processing your question...'):
         result = chain.run(input_documents=docs, question=query)
-    
+
+    # Add the AI's response to the conversation history
+    st.session_state.conversation.add_message('AI', result)
+
+    # Display the AI-generated answer
+    st.header("Answer")
+    st.write(result)
+
     # Display search results
     if docs:
         st.header("Search Results")
         st.write(f"Total search results: {len(docs)}")  # Display the number of results
 
         for index, doc in enumerate(docs, 1):
-            # Debug: Check each loop iteration
-            print(f"Displaying result {index}")
             st.write(f"Result {index}:")
-            st.write(doc.page_content)  # Display each search result
+            st.write(doc.page_content[:250])  # Display the first 250 characters of each search result
             st.write("---")
     else:
         st.write("No results found.")
-        
-    for i in range(min(3, len(docs))):
-        st.write(docs[i].page_content[:500])
-
