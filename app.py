@@ -1,12 +1,12 @@
 import streamlit as st
 from langchain.document_loaders import UnstructuredHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma, Pinecone
+from langchain.vectorstores import Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
-from langchain.chains.question_answering import load_qa_chain
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 import pinecone
 
 class Conversation:
@@ -68,26 +68,19 @@ if query:
     # Add the user's message to the conversation history
     st.session_state.conversation.add_message('Human', query)
 
-    template = """
-    System: Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language.
-   
-    {conversation_text}  
-    """
-
     # Retrieve the conversation history from the session state
     conversation_text = st.session_state.conversation.get_conversation()
-
-    # Generate prompt with updated conversation history
-    prompt = template.format(conversation_text=conversation_text)
 
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
 
     # Perform document search
     docs = docsearch.similarity_search(query, include_metadata=True, k=3)
-    
-    memory = ConversationBufferMemory()
-    conversation_chain = ConversationChain(llm=llm, verbose=True, memory=memory)
-    chain = load_qa_chain(conversation_chain, chain_type="stuff")
+
+    # Initialize memory
+    memory = ConversationBufferMemory(conversation_text)
+
+    # Load the question-answering chain
+    chain = load_qa_with_sources_chain(llm, chain_type="stuff", memory=memory)  # Replace "stuff" with the actual chain type
 
     # Use the question-answering chain to answer the question
     with st.spinner('Processing your question...'):
@@ -95,6 +88,9 @@ if query:
 
     # Add the AI's response to the conversation history
     st.session_state.conversation.add_message('AI', result)
+
+    # Update memory with new conversation
+    memory.update(result)
 
     # Display the AI-generated answer
     st.header("Answer")
@@ -111,3 +107,4 @@ if query:
             st.write("---")
     else:
         st.write("No results found.")
+
