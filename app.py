@@ -97,12 +97,14 @@ if query:
     st.write(result)  # Display the AI-generated answer
 
     docs = docsearch.similarity_search(query, include_metadata=True,k=3)
+    
+    # Load the question-answering chain
+    chain = load_qa_chain(llm, chain_type="stuff")  # Replace "stuff" with the actual chain type
 
-    # Debug: Check the docs variable
-    print(f"Number of docs: {len(docs)}")
-    for i, doc in enumerate(docs):
-        print(f"Doc {i}: {doc.page_content}")
-
+    # Use the question-answering chain to answer the question
+    with st.spinner('Processing your question...'):
+        result = chain.run(input_documents=docs, question=query)
+    
     # Display search results
     if docs:
         st.header("Search Results")
