@@ -96,6 +96,9 @@ if query:
     st.write(result)  # Display the AI-generated answer
 
     docs = docsearch.similarity_search(query, include_metadata=True)
+    print(f"Number of docs: {len(docs)}")
+    for i, doc in enumerate(docs):
+        print(f"Doc {i}: {doc.page_content}")
 
     # Display search results
     if docs:
