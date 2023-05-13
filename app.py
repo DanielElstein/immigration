@@ -84,9 +84,10 @@ if query:
 
     # Perform document search
     docs = docsearch.similarity_search(query, include_metadata=True, k=3)
-
-    # Load the question-answering chain
-    chain = load_qa_chain(llm, chain_type="stuff")  # Replace "stuff" with the actual chain type
+    
+    memory = ConversationBufferMemory()
+    conversation_chain = ConversationChain(llm=llm, verbose=True, memory=memory)
+    chain = load_qa_chain(conversation_chain, chain_type="stuff")
 
     # Use the question-answering chain to answer the question
     with st.spinner('Processing your question...'):
