@@ -117,5 +117,5 @@ if query:
         st.write("No results found.")
         
     for i in range(min(3, len(docs))):
-    st.write(docs[i].page_content[:500])
+        st.write(docs[i].page_content[:500])
 
