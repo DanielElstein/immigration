@@ -95,7 +95,7 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-    docs = docsearch.similarity_search(query, include_metadata=True)
+    docs = docsearch.similarity_search(query, include_metadata=True,k=3)
 
     # Debug: Check the docs variable
     print(f"Number of docs: {len(docs)}")
