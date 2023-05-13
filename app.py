@@ -86,15 +86,44 @@ if query:
     # Load the question-answering chain
     chain = load_qa_with_sources_chain(llm, chain_type="stuff", memory=memory)  # Replace "stuff" with the actual chain type
 
-    # Use the question-answering chain to answer the question
+    from langchain.prompts import (
+    ChatPromptTemplate, 
+    MessagesPlaceholder, 
+    SystemMessagePromptTemplate, 
+    HumanMessagePromptTemplate
+    )
+    from langchain.chains import ConversationChain
+    from langchain.memory import ConversationBufferMemory
+
+    # Define a prompt template
+    prompt = ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template("Play the role of a friendly immigration lawyer. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language."),
+        MessagesPlaceholder(variable_name="history"),
+        HumanMessagePromptTemplate.from_template("{input}")
+    ])
+
+    # Initialize memory
+    memory = ConversationBufferMemory(return_messages=True)
+
+    # Initialize the conversation chain
+    conversation_chain = ConversationChain(memory=memory, prompt=prompt, llm=llm)
+
+    # Perform document search
+    docs = docsearch.similarity_search(query, include_metadata=True, k=3)
+
+    # Add search results to the memory
+    for doc in docs:
+        memory.add_message("System", f"Document Content: {doc.page_content}")
+
+    # Add the user's message to the memory
+    memory.add_message('Human', query)
+
+    # Run the conversation chain
     with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=docs, question=query)
+        result = conversation_chain.run(input=query)
 
     # Add the AI's response to the conversation history
-    st.session_state.conversation.add_message('AI', result)
-
-    # Update memory with new conversation
-    memory.update(result)
+    memory.add_message('AI', result)
 
     # Display the AI-generated answer
     st.header("Answer")
@@ -111,4 +140,3 @@ if query:
             st.write("---")
     else:
         st.write("No results found.")
-
