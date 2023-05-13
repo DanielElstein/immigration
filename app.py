@@ -85,6 +85,9 @@ if query:
     from langchain.chains.question_answering import load_qa_chain
     chain = load_qa_chain(llm, chain_type="stuff")
 
+
+	docs = docsearch.similarity_search(query, include_metadata=True,k=3)
+	
     with st.spinner('Processing your question...'):
         #result = conversation.predict(input=prompt)
         result = chain.run(input_documents=docs, question=prompt)
@@ -98,7 +101,7 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-    docs = docsearch.similarity_search(query, include_metadata=True,k=3)
+    
 
     # Debug: Check the docs variable
     print(f"Number of docs: {len(docs)}")
