@@ -106,7 +106,7 @@ if query:
 
         for index, doc in enumerate(docs, 1):
             st.write(f"Result {index}:")
-            st.write(doc.page_content[:500])  # Display the first 250 characters of each search result
+            st.write(doc.page_content[:2000])  # Display the first 2000 characters of each search result
             st.write("---")
     else:
         st.write("No results found.")
