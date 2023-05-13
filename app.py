@@ -82,6 +82,8 @@ if query:
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
     memory = ConversationBufferMemory()
     conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
+    from langchain.chains.question_answering import load_qa_chain
+    chain = load_qa_chain(llm, chain_type="stuff")
 
     with st.spinner('Processing your question...'):
         #result = conversation.predict(input=prompt)
