@@ -32,6 +32,7 @@ custom_css = """
     header {visibility: hidden;}
     .stApp {
         background-color: #ddedee;
+	color: #000;
     }
     .anchor svg {
         display: none;
