@@ -81,7 +81,7 @@ if query:
     memory = ConversationBufferMemory()
 
     # Update memory with conversation_text
-    memory.update(conversation_text)
+    # memory.update(conversation_text)
 
     # Load the question-answering chain
     chain = load_qa_with_sources_chain(llm, chain_type="stuff", memory=memory)  # Replace "stuff" with the actual chain type
