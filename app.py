@@ -29,6 +29,9 @@ custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+        .stApp {
+        margin-top: 0;
+    }
     header {
         visibility: hidden;
         position: absolute;
