@@ -28,6 +28,7 @@ st.header("Immigration Q&A")
 custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
+    #root > div:nth-child(1) > div > div > div > div > section > div {padding-top: 0rem;}
     footer {visibility: hidden;}
     header {
         visibility: hidden;
