@@ -33,7 +33,7 @@ custom_css = """
         visibility: hidden;
         overflow: hidden;
     .stApp {
-        padding-top: 20px;
+        padding-top: 50px;
     }
     .sticky-header {
         position: sticky;
