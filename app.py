@@ -37,6 +37,9 @@ custom_css = """
     .anchor svg {
         display: none;
     }
+    a {
+        display: none;
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
