@@ -34,6 +34,10 @@ custom_css = """
         overflow: hidden;
     }
     .stApp {
+        height: 100vh;
+        overflow: auto;
+    }
+    .stApp {
         background-color: #ddedee;
         color: #000;
         margin-top: -50px;
