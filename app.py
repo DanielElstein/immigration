@@ -36,7 +36,6 @@ custom_css = """
     .stApp {
         background-color: #ddedee;
         color: #000;
-        margin-top: -50px;
     }
     .stApp h1 a, .stApp h2 a, .stApp h3 a, .stApp h4 a, .stApp h5 a, .stApp h6 a,
     .stApp h1 svg, .stApp h2 svg, .stApp h3 svg, .stApp h4 svg, .stApp h5 svg, .stApp h6 svg {
