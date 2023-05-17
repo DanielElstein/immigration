@@ -32,10 +32,15 @@ custom_css = """
     header {
         visibility: hidden;
         overflow: hidden;
-    }
     .stApp {
-        height: 100vh;
-        overflow: auto;
+        padding-top: 20px;
+    }
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: #ffffff;
+        z-index: 1;
+    }
     }
     .stApp {
         background-color: #ddedee;
