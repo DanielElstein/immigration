@@ -32,12 +32,12 @@ custom_css = """
     header {visibility: hidden;}
     .stApp {
         background-color: #ddedee;
-	color: #000;
+        color: #000;
     }
     .anchor svg {
         display: none;
     }
-    a {
+    h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
         display: none;
     }
 </style>
