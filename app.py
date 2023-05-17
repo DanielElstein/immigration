@@ -29,16 +29,8 @@ custom_css = """
 <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-        .stApp {
-        margin-top: 0;
-    }
     header {
         visibility: hidden;
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
         overflow: hidden;
     }
     .stApp {
