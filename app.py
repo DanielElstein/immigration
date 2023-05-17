@@ -34,10 +34,8 @@ custom_css = """
         background-color: #ddedee;
         color: #000;
     }
-    .anchor svg {
-        display: none;
-    }
-    h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    .stApp h1 a, .stApp h2 a, .stApp h3 a, .stApp h4 a, .stApp h5 a, .stApp h6 a,
+    .stApp h1 svg, .stApp h2 svg, .stApp h3 svg, .stApp h4 svg, .stApp h5 svg, .stApp h6 svg {
         display: none;
     }
 </style>
