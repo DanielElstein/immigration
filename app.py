@@ -97,7 +97,7 @@ if query:
     filtered_results = []
 
     for result in docs:
-        document_id = result.metadata["id"]
+        document_id = result.id
 
         if document_id not in unique_ids:
             unique_ids.add(document_id)
@@ -105,6 +105,7 @@ if query:
 
     with st.spinner('Processing your question...'):
         result = chain.run(input_documents=filtered_results, question=prompt)
+
 
 
     # Add the AI's response to the conversation history
