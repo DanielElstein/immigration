@@ -42,6 +42,12 @@ custom_css = """
     .stApp h1 svg, .stApp h2 svg, .stApp h3 svg, .stApp h4 svg, .stApp h5 svg, .stApp h6 svg {
         display: none;
     }
+    .stApp .element-container {
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
@@ -109,7 +115,7 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [0, 1, 5, 9]
+    desired_indices = [1, 5, 9]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
