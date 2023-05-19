@@ -42,7 +42,7 @@ custom_css = """
     .stApp h1 svg, .stApp h2 svg, .stApp h3 svg, .stApp h4 svg, .stApp h5 svg, .stApp h6 svg {
         display: none;
     }
-    .stApp .element-container {
+    .stApp .st-expander {
         border: 1px solid #000;
         border-radius: 5px;
         padding: 10px;
@@ -115,12 +115,12 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [1, 5, 9]
+    desired_indices = [1, 5, 9, 13]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
-            with st.beta_container():
-                st.markdown(f"**Source {idx+1}:**")  # Modified to say "Source" and correspond to the count of desired indices
-                st.write(doc.page_content)  # Display each desired search result
+            with st.beta_expander(f"Source {idx+1}", expanded=True): 
+                st.markdown(doc.page_content)  # Display each desired search result
                 st.write("---")
+
 
