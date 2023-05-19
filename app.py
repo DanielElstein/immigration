@@ -91,11 +91,21 @@ if query:
     from langchain.chains.question_answering import load_qa_chain
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    docs = docsearch.similarity_search(query,k=3)
-	
+    docs = docsearch.similarity_search(query, k=10)
+
+    unique_ids = set()  # Set to track unique document IDs
+    filtered_results = []
+
+    for result in docs:
+        document_id = result.metadata["id"]
+
+        if document_id not in unique_ids:
+            unique_ids.add(document_id)
+            filtered_results.append(result)
+
     with st.spinner('Processing your question...'):
-        #result = conversation.predict(input=prompt)
-        result = chain.run(input_documents=docs, question=prompt)
+        result = chain.run(input_documents=filtered_results, question=prompt)
+
 
     # Add the AI's response to the conversation history
     st.session_state.conversation.add_message('AI', result)
