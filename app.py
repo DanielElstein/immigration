@@ -109,10 +109,12 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [1, 5, 9, 13]
+    desired_indices = [0, 1, 5, 9]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
-            st.markdown(f"**Source {idx+1}:**")  # Modified to say "Source" and correspond to the count of desired indices
-            st.write(doc.page_content)  # Display each desired search result
-            st.write("---")
+            with st.beta_container():
+                st.markdown(f"**Source {idx+1}:**")  # Modified to say "Source" and correspond to the count of desired indices
+                st.write(doc.page_content)  # Display each desired search result
+                st.write("---")
+
