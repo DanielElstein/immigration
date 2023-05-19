@@ -100,43 +100,20 @@ if query:
     # Add the AI's response to the conversation history
     st.session_state.conversation.add_message('AI', result)
 
-    st.header("Prompt")
-    st.write(prompt)  # Display the prompt value
+    #st.header("Prompt")
+    #st.write(prompt)  # Display the prompt value
 
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-    # Debug: Check the docs variable
-    print(f"Number of docs: {len(docs)}")
-    for i, doc in enumerate(docs):
-        print(f"Doc {i}: {doc.page_content}")
 
     # Display search results
+    st.header("From the Manual:")
     desired_indices = [1, 5, 9, 13]
     for index in desired_indices:
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
-            st.write(f"Result {index}:")
+            #st.write(f"Result {index}:")
             st.write(doc.page_content)  # Display each desired search result
             st.write("---")
-
-    # Perform the similarity search
-    search_results = docsearch.similarity_search(query, k=10)
-
-    # Track unique document content
-    unique_contents = set()
-
-    # Filter out duplicate contents
-    filtered_results = []
-    for result in search_results:
-        document_content = result.page_content
-        if document_content not in unique_contents:
-            unique_contents.add(document_content)
-            filtered_results.append(result)
-
-    # Display the filtered search results
-    for index, result in enumerate(filtered_results, 1):
-        print(f"Result {index}:")
-        print(result.page_content)
-        print("---")
 
