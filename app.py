@@ -114,11 +114,11 @@ if query:
 
     # Display search results
     desired_indices = [1, 5, 9, 13]
-    	if index-1 < len(docs):  # Python uses 0-indexing
-		doc = docs[index-1]
-		st.write(f"Result {index}:")
-		st.write(doc.page_content)  # Display each desired search result
-		st.write("---")
+        if index-1 < len(docs):  # Python uses 0-indexing
+	    doc = docs[index-1]
+	    st.write(f"Result {index}:")
+	    st.write(doc.page_content)  # Display each desired search result
+	    st.write("---")
 
 
 
