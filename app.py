@@ -35,7 +35,7 @@ custom_css = """
         overflow: hidden;
     }
     .stApp {
-        background-color: #FFFFCC;
+        background-color: #FFFFB3;
         color: #000;
     }
     .stApp h1 a, .stApp h2 a, .stApp h3 a, .stApp h4 a, .stApp h5 a, .stApp h6 a,
@@ -115,7 +115,7 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [0, 3]
+    desired_indices = [1, 4]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
