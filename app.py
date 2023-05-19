@@ -115,7 +115,7 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [1, 5, 9, 13]
+    desired_indices = [1, 5]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
