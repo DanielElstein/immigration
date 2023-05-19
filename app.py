@@ -113,21 +113,14 @@ if query:
         print(f"Doc {i}: {doc.page_content}")
 
     # Display search results
-    if docs:
-        st.header("Search Results")
-        st.write(f"Total search results: {len(docs)}")  # Display the number of results
+    desired_indices = [1, 5, 9, 13]
+	for index in desired_indices:
+	    if index-1 < len(docs):  # Python uses 0-indexing
+		doc = docs[index-1]
+		st.write(f"Result {index}:")
+		st.write(doc.page_content)  # Display each desired search result
+		st.write("---")
 
-        for index, doc in enumerate(docs, 1):
-            # Debug: Check each loop iteration
-            print(f"Displaying result {index}")
-            st.write(f"Result {index}:")
-            st.write(doc.page_content)  # Display each search result
-            st.write("---")
-    else:
-        st.write("No results found.")
-        
-    for i in range(min(3, len(docs))):
-        st.write(docs[i].page_content[:500]) 
 	
     # Perform the similarity search
     search_results = docsearch.similarity_search(query, k=10)
