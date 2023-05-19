@@ -93,16 +93,16 @@ if query:
 
     docs = docsearch.similarity_search(query, k=10)
 
-    # Deduplicate the search results
-    unique_docs = []
-    unique_texts = set()
+# Deduplicate the search results
+unique_docs = []
+unique_texts = set()
 
-    for doc in docs:
-        document_text = doc.page_content
+for doc in docs:
+    document_text = doc.page_content
 
-        if document_text not in unique_texts:
-            unique_docs.append(doc)
-            unique_texts.add(document_text)
+    if document_text not in unique_texts:
+        unique_docs.append(doc)
+        unique_texts.add(document_text)
 
 # Use the deduplicated search results
 deduplicated_docs = unique_docs
