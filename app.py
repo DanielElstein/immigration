@@ -61,12 +61,14 @@ pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 index_name = "immigration"
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
+query = ""  # Initialize query as an empty string
+
 with st.form(key='my_form'):
-    text_input = st.text_input(label='Enter some text')
+    query = st.text_input(label='Enter some text')
     submit_button = st.form_submit_button(label='Submit')
-    
-    if submit_button or text_input:
-        st.write(f'You entered: {text_input}')
+
+    if submit_button or query:
+        st.write(f'You entered: {query}')
 
 if query:
     # Create conversation in session_state if it doesn't exist
