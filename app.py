@@ -93,18 +93,8 @@ if query:
 
     docs = docsearch.similarity_search(query, k=10)
 
-    unique_ids = set()  # Set to track unique document IDs
-    filtered_results = []
-
-    for result in docs:
-        document_id = result["metadata"]["id"]
-
-        if document_id not in unique_ids:
-            unique_ids.add(document_id)
-            filtered_results.append(result)
-
     with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=filtered_results, question=prompt)
+        result = chain.run(input_documents=docs, question=prompt)
 
 
 
