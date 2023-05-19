@@ -93,8 +93,23 @@ if query:
 
     docs = docsearch.similarity_search(query, k=10)
 
+    # Deduplicate the search results
+    unique_docs = []
+    unique_ids = set()
+
+    for doc in docs:
+        document_id = doc.document_id
+
+        if document_id not in unique_ids:
+            unique_docs.append(doc)
+            unique_ids.add(document_id)
+
+    # Use the deduplicated search results
+    deduplicated_docs = unique_docs
+
     with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=docs, question=prompt)
+        result = chain.run(input_documents=deduplicated_docs, question=prompt)
+
 
 
 
