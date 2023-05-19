@@ -121,6 +121,6 @@ if query:
             doc = docs[index-1]
             with st.beta_expander(f"Source {idx+1}", expanded=True): 
                 st.markdown(doc.page_content)  # Display each desired search result
-                st.write("---")
+                #st.write("---")
 
 
