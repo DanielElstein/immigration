@@ -108,7 +108,7 @@ if query:
 
 
     # Display search results
-    st.subheader("Sources (from the USCIS policy manual)")
+    st.subheader("Sources")
     desired_indices = [1, 5, 9, 13]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
