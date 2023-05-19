@@ -92,7 +92,7 @@ if query:
     chain = load_qa_chain(llm, chain_type="stuff")
 
     docs = docsearch.similarity_search(query,k=12)
-	
+    
     with st.spinner('Processing your question...'):
         #result = conversation.predict(input=prompt)
         result = chain.run(input_documents=docs, question=prompt)
@@ -106,7 +106,6 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
-
     # Debug: Check the docs variable
     print(f"Number of docs: {len(docs)}")
     for i, doc in enumerate(docs):
@@ -114,15 +113,13 @@ if query:
 
     # Display search results
     desired_indices = [1, 5, 9, 13]
+    for index in desired_indices:
         if index-1 < len(docs):  # Python uses 0-indexing
-	    doc = docs[index-1]
-	    st.write(f"Result {index}:")
-	    st.write(doc.page_content)  # Display each desired search result
-	    st.write("---")
+            doc = docs[index-1]
+            st.write(f"Result {index}:")
+            st.write(doc.page_content)  # Display each desired search result
+            st.write("---")
 
-
-
-	
     # Perform the similarity search
     search_results = docsearch.similarity_search(query, k=10)
 
@@ -142,3 +139,4 @@ if query:
         print(f"Result {index}:")
         print(result.page_content)
         print("---")
+
