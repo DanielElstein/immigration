@@ -95,14 +95,17 @@ if query:
 
     # Deduplicate the search results
     unique_docs = []
-    unique_ids = set()
+    unique_texts = set()
 
     for doc in docs:
-        document_id = doc.document_id
+        document_text = doc.page_content
 
-        if document_id not in unique_ids:
+        if document_text not in unique_texts:
             unique_docs.append(doc)
-            unique_ids.add(document_id)
+            unique_texts.add(document_text)
+
+# Use the deduplicated search results
+deduplicated_docs = unique_docs
 
     # Use the deduplicated search results
     deduplicated_docs = unique_docs
