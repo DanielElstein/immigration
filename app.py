@@ -91,28 +91,11 @@ if query:
     from langchain.chains.question_answering import load_qa_chain
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    docs = docsearch.similarity_search(query, k=10)
-
-    # Deduplicate the search results
-    unique_docs = []
-    unique_texts = set()
-
-    for doc in docs:
-        document_text = doc.page_content
-
-        if document_text not in unique_texts:
-            unique_docs.append(doc)
-            unique_texts.add(document_text)
-
-    # Use the deduplicated search results
-    deduplicated_docs = unique_docs
-
-    # Use the deduplicated search results
-    deduplicated_docs = unique_docs
-
+    docs = docsearch.similarity_search(query,k=3)
+	
     with st.spinner('Processing your question...'):
-        result = chain.run(input_documents=deduplicated_docs, question=prompt)
-
+        #result = conversation.predict(input=prompt)
+        result = chain.run(input_documents=docs, question=prompt)
 
     # Add the AI's response to the conversation history
     st.session_state.conversation.add_message('AI', result)
@@ -144,4 +127,4 @@ if query:
         st.write("No results found.")
         
     for i in range(min(3, len(docs))):
-        st.write(docs[i].page_content[:500])
+        st.write(docs[i].page_content[:500]) 
