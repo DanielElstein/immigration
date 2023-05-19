@@ -97,7 +97,7 @@ if query:
     from langchain.chains.question_answering import load_qa_chain
     chain = load_qa_chain(llm, chain_type="stuff")
 
-    docs = docsearch.similarity_search(query,k=4)
+    docs = docsearch.similarity_search(query,k=5)
     
     with st.spinner('Processing your question...'):
         #result = conversation.predict(input=prompt)
@@ -115,7 +115,7 @@ if query:
 
     # Display search results
     st.subheader("Sources")
-    desired_indices = [1, 4]
+    desired_indices = [1, 5]
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
