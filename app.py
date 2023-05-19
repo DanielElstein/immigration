@@ -35,7 +35,7 @@ custom_css = """
         overflow: hidden;
     }
     .stApp {
-        background-color: #FFFFB3;
+        background-color: #FFFFE6;
         color: #000;
     }
     .stApp h1 a, .stApp h2 a, .stApp h3 a, .stApp h4 a, .stApp h5 a, .stApp h6 a,
