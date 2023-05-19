@@ -103,12 +103,13 @@ if query:
     #st.header("Prompt")
     #st.write(prompt)  # Display the prompt value
 
-    st.header("Answer")
+    st.header("AI Response")
     st.write(result)  # Display the AI-generated answer
 
 
     # Display search results
-    st.header("From the Manual:")
+    st.header("Sources")
+    st.subheader("Quoted from the USCIS Policy Manual:")
     desired_indices = [1, 5, 9, 13]
     for index in desired_indices:
         if index-1 < len(docs):  # Python uses 0-indexing
