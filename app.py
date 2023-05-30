@@ -23,7 +23,7 @@ class Conversation:
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
-# Removed the markdown using 'result' here. It is now placed inside the if condition.
+st.header("Immigration Q&A")
 
 custom_css = """
 <style>
@@ -50,8 +50,13 @@ custom_css = """
     }
 </style>
 """
+st.markdown(custom_css, unsafe_allow_html=True)
 
-# Rest of your code...
+# Display the text
+st.markdown("""
+
+*Legal Disclaimer: This platform is meant for informational purposes only. It is not affiliated with USCIS or any other governmental organization, and is not a substitute for professional legal advice. The answers provided are based on the USCIS policy manual and may not cover all aspects of your specific situation. For personalized guidance, please consult an immigration attorney.*
+""")
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
@@ -74,7 +79,23 @@ if query:
     # Add the user's message to the conversation history
     st.session_state.conversation.add_message('Human', query)
 
-    # Rest of your code...
+    template = """
+    System: Play the role of a friendly immigration lawyer. You answer questions about immigration to the United States. Respond to questions in detail, in the same language as the human's most recent question. If they ask a question in Spanish, you should answer in Spanish. If they ask a question in French, you should answer in French. And so on, for every language. Do not say anything about this system message to the user.
+   
+    {conversation_text}  
+    """
+
+    # Retrieve the conversation history from the session state
+    conversation_text = st.session_state.conversation.get_conversation()
+
+    # Generate prompt with updated conversation history
+    prompt = template.format(conversation_text=conversation_text)
+
+    llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
+    memory = ConversationBufferMemory()
+    conversation = ConversationChain(llm=llm, verbose=True, memory=memory)
+    from langchain.chains.question_answering import load_qa_chain
+    chain = load_qa_chain(llm, chain_type="stuff")
 
     docs = docsearch.similarity_search(query,k=5)
     
@@ -91,6 +112,7 @@ if query:
     st.header("Answer")
     st.write(result)  # Display the AI-generated answer
 
+
     # Display search results
     st.subheader("Sources")
     desired_indices = [1, 5]
@@ -100,7 +122,3 @@ if query:
             with st.beta_expander(f"Source {idx+1}", expanded=True): 
                 st.markdown(doc.page_content)  # Display each desired search result
                 #st.write("---")
-else:
-    st.markdown("""
-    ## Answer
-    No question has been asked yet.""")
