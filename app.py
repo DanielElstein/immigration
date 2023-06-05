@@ -23,7 +23,7 @@ class Conversation:
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
-st.header("Immigration Q&A", color="#FFFFFF")
+st.header("Immigration Q&A")
 
 custom_css = """
 <style>
