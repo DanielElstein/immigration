@@ -23,8 +23,8 @@ class Conversation:
 
 st.set_page_config(page_title="Immigration Q&A", layout="wide", initial_sidebar_state="expanded")
 
-#st.header("Immigration Q&A")
-st.markdown("<h1 style='color: black;'>Immigration Q&amp;A</h1>", unsafe_allow_html=True)
+st.header("Immigration Q&A")
+#st.markdown("<h1 style='color: black;'>Immigration Q&amp;A</h1>", unsafe_allow_html=True)
 
 
 custom_css = """
