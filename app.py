@@ -50,6 +50,10 @@ custom_css = """
         padding: 10px;
         margin-bottom: 10px;
     }
+    .stApp p, .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+    color: #000;
+}
+
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
