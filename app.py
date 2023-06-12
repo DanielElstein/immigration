@@ -125,6 +125,6 @@ if query:
     for idx, index in enumerate(desired_indices):
         if index-1 < len(docs):  # Python uses 0-indexing
             doc = docs[index-1]
-            with st.beta_expander(f"Source {idx+1}", expanded=True): 
+            with st.expander(f"Source {idx+1}", expanded=True): 
                 st.markdown(doc.page_content)  # Display each desired search result
                 #st.write("---")
